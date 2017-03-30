@@ -1,0 +1,638 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		CB108D3E1E7BBCBD00D80842 /* OutputFw */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = CB108D3F1E7BBCBD00D80842 /* Build configuration list for PBXAggregateTarget "OutputFw" */;
+			buildPhases = (
+				CB108D421E7BBD8600D80842 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = OutputFw;
+			productName = OutputFw;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		9693261476AE67A79C4770FA /* Pods_CTNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C7AEEE49CFB4F3E7CE61E9 /* Pods_CTNetworking.framework */; };
+		CB9807EF1E7A6D4200465168 /* CTNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9807ED1E7A6D4200465168 /* CTNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9808761E7A6E0200465168 /* NSArray+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9807FC1E7A6E0200465168 /* NSArray+AXNetworkingMethods.h */; };
+		CB9808771E7A6E0200465168 /* NSArray+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9807FD1E7A6E0200465168 /* NSArray+AXNetworkingMethods.m */; };
+		CB9808781E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9807FE1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h */; };
+		CB9808791E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9807FF1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.m */; };
+		CB98087A1E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808001E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.h */; };
+		CB98087B1E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808011E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m */; };
+		CB98087C1E7A6E0200465168 /* NSObject+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808021E7A6E0200465168 /* NSObject+AXNetworkingMethods.h */; };
+		CB98087D1E7A6E0200465168 /* NSObject+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808031E7A6E0200465168 /* NSObject+AXNetworkingMethods.m */; };
+		CB98087E1E7A6E0200465168 /* NSString+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808041E7A6E0200465168 /* NSString+AXNetworkingMethods.h */; };
+		CB98087F1E7A6E0200465168 /* NSString+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808051E7A6E0200465168 /* NSString+AXNetworkingMethods.m */; };
+		CB9808801E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808061E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.h */; };
+		CB9808811E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808071E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m */; };
+		CB9808821E7A6E0200465168 /* CTApiProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98080A1E7A6E0200465168 /* CTApiProxy.h */; };
+		CB9808831E7A6E0200465168 /* CTApiProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98080B1E7A6E0200465168 /* CTApiProxy.m */; };
+		CB9808841E7A6E0200465168 /* CTAPIBaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98080D1E7A6E0200465168 /* CTAPIBaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9808851E7A6E0200465168 /* CTAPIBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98080E1E7A6E0200465168 /* CTAPIBaseManager.m */; };
+		CB9808861E7A6E0200465168 /* CTCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808101E7A6E0200465168 /* CTCache.h */; };
+		CB9808871E7A6E0200465168 /* CTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808111E7A6E0200465168 /* CTCache.m */; };
+		CB9808881E7A6E0200465168 /* CTCachedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808121E7A6E0200465168 /* CTCachedObject.h */; };
+		CB9808891E7A6E0200465168 /* CTCachedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808131E7A6E0200465168 /* CTCachedObject.m */; };
+		CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808161E7A6E0200465168 /* CTLogger.h */; };
+		CB98088B1E7A6E0200465168 /* CTLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808171E7A6E0200465168 /* CTLogger.m */; };
+		CB98088C1E7A6E0200465168 /* CTLoggerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808181E7A6E0200465168 /* CTLoggerConfiguration.h */; };
+		CB98088D1E7A6E0200465168 /* CTLoggerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808191E7A6E0200465168 /* CTLoggerConfiguration.m */; };
+		CB98088E1E7A6E0200465168 /* CTURLResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98081B1E7A6E0200465168 /* CTURLResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB98088F1E7A6E0200465168 /* CTURLResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98081C1E7A6E0200465168 /* CTURLResponse.m */; };
+		CB9808911E7A6E0200465168 /* CTCommonParamsGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98086B1E7A6E0200465168 /* CTCommonParamsGenerator.h */; };
+		CB9808921E7A6E0200465168 /* CTCommonParamsGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98086C1E7A6E0200465168 /* CTCommonParamsGenerator.m */; };
+		CB9808931E7A6E0200465168 /* CTRequestGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98086E1E7A6E0200465168 /* CTRequestGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9808941E7A6E0200465168 /* CTSignatureGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808701E7A6E0200465168 /* CTSignatureGenerator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9808951E7A6E0200465168 /* CTSignatureGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808711E7A6E0200465168 /* CTSignatureGenerator.m */; };
+		CB9808961E7A6E0200465168 /* CTService.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808741E7A6E0200465168 /* CTService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB9808971E7A6E0200465168 /* CTService.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808751E7A6E0200465168 /* CTService.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		CB9807EA1E7A6D4200465168 /* CTNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CTNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CB9807ED1E7A6D4200465168 /* CTNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTNetworking.h; sourceTree = "<group>"; };
+		CB9807EE1E7A6D4200465168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CB9807FC1E7A6E0200465168 /* NSArray+AXNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+AXNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9807FD1E7A6E0200465168 /* NSArray+AXNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+AXNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB9807FE1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+AXNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9807FF1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+AXNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB9808001E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+AXNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9808011E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+AXNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB9808021E7A6E0200465168 /* NSObject+AXNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+AXNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9808031E7A6E0200465168 /* NSObject+AXNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+AXNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB9808041E7A6E0200465168 /* NSString+AXNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+AXNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9808051E7A6E0200465168 /* NSString+AXNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AXNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB9808061E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLRequest+CTNetworkingMethods.h"; sourceTree = "<group>"; };
+		CB9808071E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLRequest+CTNetworkingMethods.m"; sourceTree = "<group>"; };
+		CB98080A1E7A6E0200465168 /* CTApiProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTApiProxy.h; sourceTree = "<group>"; };
+		CB98080B1E7A6E0200465168 /* CTApiProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTApiProxy.m; sourceTree = "<group>"; };
+		CB98080D1E7A6E0200465168 /* CTAPIBaseManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTAPIBaseManager.h; sourceTree = "<group>"; };
+		CB98080E1E7A6E0200465168 /* CTAPIBaseManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTAPIBaseManager.m; sourceTree = "<group>"; };
+		CB9808101E7A6E0200465168 /* CTCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTCache.h; sourceTree = "<group>"; };
+		CB9808111E7A6E0200465168 /* CTCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTCache.m; sourceTree = "<group>"; };
+		CB9808121E7A6E0200465168 /* CTCachedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTCachedObject.h; sourceTree = "<group>"; };
+		CB9808131E7A6E0200465168 /* CTCachedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTCachedObject.m; sourceTree = "<group>"; };
+		CB9808161E7A6E0200465168 /* CTLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTLogger.h; sourceTree = "<group>"; };
+		CB9808171E7A6E0200465168 /* CTLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTLogger.m; sourceTree = "<group>"; };
+		CB9808181E7A6E0200465168 /* CTLoggerConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTLoggerConfiguration.h; sourceTree = "<group>"; };
+		CB9808191E7A6E0200465168 /* CTLoggerConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTLoggerConfiguration.m; sourceTree = "<group>"; };
+		CB98081B1E7A6E0200465168 /* CTURLResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTURLResponse.h; sourceTree = "<group>"; };
+		CB98081C1E7A6E0200465168 /* CTURLResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTURLResponse.m; sourceTree = "<group>"; };
+		CB98086B1E7A6E0200465168 /* CTCommonParamsGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTCommonParamsGenerator.h; sourceTree = "<group>"; };
+		CB98086C1E7A6E0200465168 /* CTCommonParamsGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTCommonParamsGenerator.m; sourceTree = "<group>"; };
+		CB98086E1E7A6E0200465168 /* CTRequestGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTRequestGenerator.h; sourceTree = "<group>"; };
+		CB9808701E7A6E0200465168 /* CTSignatureGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTSignatureGenerator.h; sourceTree = "<group>"; };
+		CB9808711E7A6E0200465168 /* CTSignatureGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTSignatureGenerator.m; sourceTree = "<group>"; };
+		CB9808741E7A6E0200465168 /* CTService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CTService.h; sourceTree = "<group>"; };
+		CB9808751E7A6E0200465168 /* CTService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CTService.m; sourceTree = "<group>"; };
+		F1C7AEEE49CFB4F3E7CE61E9 /* Pods_CTNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_CTNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		CB9807E61E7A6D4200465168 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9693261476AE67A79C4770FA /* Pods_CTNetworking.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		30E97CF1D924523FEE95C336 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		AC998287F25E7052CAD60B1F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F1C7AEEE49CFB4F3E7CE61E9 /* Pods_CTNetworking.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CB9807E01E7A6D4200465168 = {
+			isa = PBXGroup;
+			children = (
+				CB9807EC1E7A6D4200465168 /* CTNetworking */,
+				CB9807EB1E7A6D4200465168 /* Products */,
+				30E97CF1D924523FEE95C336 /* Pods */,
+				AC998287F25E7052CAD60B1F /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		CB9807EB1E7A6D4200465168 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CB9807EA1E7A6D4200465168 /* CTNetworking.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CB9807EC1E7A6D4200465168 /* CTNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				CB9807FB1E7A6E0200465168 /* Categories */,
+				CB9808081E7A6E0200465168 /* Components */,
+				CB9808691E7A6E0200465168 /* Generators */,
+				CB9808731E7A6E0200465168 /* Services */,
+				CB9807ED1E7A6D4200465168 /* CTNetworking.h */,
+				CB9807EE1E7A6D4200465168 /* Info.plist */,
+			);
+			path = CTNetworking;
+			sourceTree = "<group>";
+		};
+		CB9807FB1E7A6E0200465168 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				CB9807FC1E7A6E0200465168 /* NSArray+AXNetworkingMethods.h */,
+				CB9807FD1E7A6E0200465168 /* NSArray+AXNetworkingMethods.m */,
+				CB9807FE1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h */,
+				CB9807FF1E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.m */,
+				CB9808001E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.h */,
+				CB9808011E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m */,
+				CB9808021E7A6E0200465168 /* NSObject+AXNetworkingMethods.h */,
+				CB9808031E7A6E0200465168 /* NSObject+AXNetworkingMethods.m */,
+				CB9808041E7A6E0200465168 /* NSString+AXNetworkingMethods.h */,
+				CB9808051E7A6E0200465168 /* NSString+AXNetworkingMethods.m */,
+				CB9808061E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.h */,
+				CB9808071E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		CB9808081E7A6E0200465168 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				CB9808091E7A6E0200465168 /* APIProxy */,
+				CB98080C1E7A6E0200465168 /* BaseAPIManager */,
+				CB98080F1E7A6E0200465168 /* CacheComponents */,
+				CB9808151E7A6E0200465168 /* LogComponents */,
+				CB98081A1E7A6E0200465168 /* URLResponse */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		CB9808091E7A6E0200465168 /* APIProxy */ = {
+			isa = PBXGroup;
+			children = (
+				CB98080A1E7A6E0200465168 /* CTApiProxy.h */,
+				CB98080B1E7A6E0200465168 /* CTApiProxy.m */,
+			);
+			path = APIProxy;
+			sourceTree = "<group>";
+		};
+		CB98080C1E7A6E0200465168 /* BaseAPIManager */ = {
+			isa = PBXGroup;
+			children = (
+				CB98080D1E7A6E0200465168 /* CTAPIBaseManager.h */,
+				CB98080E1E7A6E0200465168 /* CTAPIBaseManager.m */,
+			);
+			path = BaseAPIManager;
+			sourceTree = "<group>";
+		};
+		CB98080F1E7A6E0200465168 /* CacheComponents */ = {
+			isa = PBXGroup;
+			children = (
+				CB9808101E7A6E0200465168 /* CTCache.h */,
+				CB9808111E7A6E0200465168 /* CTCache.m */,
+				CB9808121E7A6E0200465168 /* CTCachedObject.h */,
+				CB9808131E7A6E0200465168 /* CTCachedObject.m */,
+			);
+			path = CacheComponents;
+			sourceTree = "<group>";
+		};
+		CB9808151E7A6E0200465168 /* LogComponents */ = {
+			isa = PBXGroup;
+			children = (
+				CB9808161E7A6E0200465168 /* CTLogger.h */,
+				CB9808171E7A6E0200465168 /* CTLogger.m */,
+				CB9808181E7A6E0200465168 /* CTLoggerConfiguration.h */,
+				CB9808191E7A6E0200465168 /* CTLoggerConfiguration.m */,
+			);
+			path = LogComponents;
+			sourceTree = "<group>";
+		};
+		CB98081A1E7A6E0200465168 /* URLResponse */ = {
+			isa = PBXGroup;
+			children = (
+				CB98081B1E7A6E0200465168 /* CTURLResponse.h */,
+				CB98081C1E7A6E0200465168 /* CTURLResponse.m */,
+			);
+			path = URLResponse;
+			sourceTree = "<group>";
+		};
+		CB9808691E7A6E0200465168 /* Generators */ = {
+			isa = PBXGroup;
+			children = (
+				CB98086A1E7A6E0200465168 /* CommonParamsGenerator */,
+				CB98086D1E7A6E0200465168 /* RequestGenerator */,
+				CB98086F1E7A6E0200465168 /* SignatureGenerator */,
+			);
+			path = Generators;
+			sourceTree = "<group>";
+		};
+		CB98086A1E7A6E0200465168 /* CommonParamsGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				CB98086B1E7A6E0200465168 /* CTCommonParamsGenerator.h */,
+				CB98086C1E7A6E0200465168 /* CTCommonParamsGenerator.m */,
+			);
+			path = CommonParamsGenerator;
+			sourceTree = "<group>";
+		};
+		CB98086D1E7A6E0200465168 /* RequestGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				CB98086E1E7A6E0200465168 /* CTRequestGenerator.h */,
+			);
+			path = RequestGenerator;
+			sourceTree = "<group>";
+		};
+		CB98086F1E7A6E0200465168 /* SignatureGenerator */ = {
+			isa = PBXGroup;
+			children = (
+				CB9808701E7A6E0200465168 /* CTSignatureGenerator.h */,
+				CB9808711E7A6E0200465168 /* CTSignatureGenerator.m */,
+			);
+			path = SignatureGenerator;
+			sourceTree = "<group>";
+		};
+		CB9808731E7A6E0200465168 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				CB9808741E7A6E0200465168 /* CTService.h */,
+				CB9808751E7A6E0200465168 /* CTService.m */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		CB9807E71E7A6D4200465168 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB98087E1E7A6E0200465168 /* NSString+AXNetworkingMethods.h in Headers */,
+				CB9808931E7A6E0200465168 /* CTRequestGenerator.h in Headers */,
+				CB98088C1E7A6E0200465168 /* CTLoggerConfiguration.h in Headers */,
+				CB9808941E7A6E0200465168 /* CTSignatureGenerator.h in Headers */,
+				CB98087C1E7A6E0200465168 /* NSObject+AXNetworkingMethods.h in Headers */,
+				CB9808961E7A6E0200465168 /* CTService.h in Headers */,
+				CB9807EF1E7A6D4200465168 /* CTNetworking.h in Headers */,
+				CB98087A1E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.h in Headers */,
+				CB9808861E7A6E0200465168 /* CTCache.h in Headers */,
+				CB9808881E7A6E0200465168 /* CTCachedObject.h in Headers */,
+				CB9808781E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h in Headers */,
+				CB9808911E7A6E0200465168 /* CTCommonParamsGenerator.h in Headers */,
+				CB98088E1E7A6E0200465168 /* CTURLResponse.h in Headers */,
+				CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */,
+				CB9808821E7A6E0200465168 /* CTApiProxy.h in Headers */,
+				CB9808841E7A6E0200465168 /* CTAPIBaseManager.h in Headers */,
+				CB9808801E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.h in Headers */,
+				CB9808761E7A6E0200465168 /* NSArray+AXNetworkingMethods.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		CB9807E91E7A6D4200465168 /* CTNetworking */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CB9807F21E7A6D4200465168 /* Build configuration list for PBXNativeTarget "CTNetworking" */;
+			buildPhases = (
+				AC4702482657FBFB83282613 /* [CP] Check Pods Manifest.lock */,
+				CB9807E51E7A6D4200465168 /* Sources */,
+				CB9807E61E7A6D4200465168 /* Frameworks */,
+				CB9807E71E7A6D4200465168 /* Headers */,
+				CB9807E81E7A6D4200465168 /* Resources */,
+				0C4CB55B528B77F63BF7204E /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CTNetworking;
+			productName = CTNetworking;
+			productReference = CB9807EA1E7A6D4200465168 /* CTNetworking.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CB9807E11E7A6D4200465168 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = Charlie;
+				TargetAttributes = {
+					CB108D3E1E7BBCBD00D80842 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = YG7RVX9QWP;
+						ProvisioningStyle = Automatic;
+					};
+					CB9807E91E7A6D4200465168 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = YG7RVX9QWP;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = CB9807E41E7A6D4200465168 /* Build configuration list for PBXProject "CTNetworking" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = CB9807E01E7A6D4200465168;
+			productRefGroup = CB9807EB1E7A6D4200465168 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				CB9807E91E7A6D4200465168 /* CTNetworking */,
+				CB108D3E1E7BBCBD00D80842 /* OutputFw */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		CB9807E81E7A6D4200465168 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0C4CB55B528B77F63BF7204E /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AC4702482657FBFB83282613 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		CB108D421E7BBD8600D80842 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "###\n#\n# 把API项目打包成 framework并复制到项目目录\n#\n##\n\nOUT_DIR=${PROJECT_DIR}\n\nWORKSPACE_NAME=${PROJECT_NAME}.xcworkspace\n\n##\n# 打包API\n##\nAPI_NAME=\"CTNetworking\"\n\n### 1 生成.framework\n#clean build是先清除原来的build\n# 1.1 生成API.framework For simulator\nxcodebuild -workspace ${WORKSPACE_NAME} -scheme ${API_NAME} -sdk iphonesimulator -configuration \"Release\" clean build\n# 1.2 生成API.framework For device\nxcodebuild -workspace ${WORKSPACE_NAME} -scheme ${API_NAME} -sdk iphoneos -configuration \"Release\" clean build\n\n### 2 将模拟器framework和真机设备framework合并为一个framework\n#因为framework的合并,lipo只是合并了最后的二进制可执行文件,所以其它的需要我们自己复制过来\nAPI_FW_NAME=${API_NAME}.framework\nFW_OUT_DIR=${OUT_DIR}/${API_FW_NAME}\n# 2.1.1 删除旧的framework文件夹，新建一个同名文件夹\nif [ -d \"${FW_OUT_DIR}\" ]; then\nrm -rf \"${FW_OUT_DIR}\"\nfi\nmkdir -p \"${FW_OUT_DIR}\"\n# 2.1.2 把步骤1.2生成设备framework复制到刚新建的同名文件夹下\ncp -R \"${BUILD_DIR}/Release-iphoneos/${API_FW_NAME}\" \"${OUT_DIR}\"\n\n#合并模拟器和真机的架构\nlipo -create  \"${BUILD_DIR}/Release-iphonesimulator/${API_FW_NAME}/${API_NAME}\" \"${BUILD_DIR}/Release-iphoneos/${API_FW_NAME}/${API_NAME}\" -output \"${FW_OUT_DIR}/${API_NAME}\"\n\n# #因为只生成 release，会导致 debug 无法编译，把 release copy到debug\n# if [[ ${CONFIGURATION} == \"Debug\" ]]; then\n# if [ -d \"${BUILD_DIR}/Debug-iphonesimulator\" ]; then\n# rm -rf \"${BUILD_DIR}/Debug-iphonesimulator\"\n# fi\n# cp -R \"${BUILD_DIR}/Release-iphonesimulator\" \"${BUILD_DIR}/Debug-iphonesimulator\"\n\n# if [ -d \"${BUILD_DIR}/Debug-iphoneos\" ]; then\n# rm -rf \"${BUILD_DIR}/Debug-iphoneos\"\n# fi\n# cp -R \"${BUILD_DIR}/Release-iphoneos\" \"${BUILD_DIR}/Debug-iphoneos\"\n# fi\n\n# open \"${BUILD_DIR}/Release-iphonesimulator/${API_FW_NAME}\"\n\nopen \"${OUT_DIR}\"\n\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		CB9807E51E7A6D4200465168 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB9808791E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.m in Sources */,
+				CB9808951E7A6E0200465168 /* CTSignatureGenerator.m in Sources */,
+				CB9808921E7A6E0200465168 /* CTCommonParamsGenerator.m in Sources */,
+				CB98087D1E7A6E0200465168 /* NSObject+AXNetworkingMethods.m in Sources */,
+				CB9808811E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m in Sources */,
+				CB98087B1E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m in Sources */,
+				CB9808851E7A6E0200465168 /* CTAPIBaseManager.m in Sources */,
+				CB98088B1E7A6E0200465168 /* CTLogger.m in Sources */,
+				CB9808891E7A6E0200465168 /* CTCachedObject.m in Sources */,
+				CB9808871E7A6E0200465168 /* CTCache.m in Sources */,
+				CB98088F1E7A6E0200465168 /* CTURLResponse.m in Sources */,
+				CB9808771E7A6E0200465168 /* NSArray+AXNetworkingMethods.m in Sources */,
+				CB98088D1E7A6E0200465168 /* CTLoggerConfiguration.m in Sources */,
+				CB98087F1E7A6E0200465168 /* NSString+AXNetworkingMethods.m in Sources */,
+				CB9808971E7A6E0200465168 /* CTService.m in Sources */,
+				CB9808831E7A6E0200465168 /* CTApiProxy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		CB108D3C1E7BBC5D00D80842 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		CB108D3D1E7BBC5D00D80842 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YG7RVX9QWP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CTNetworking/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.charlie.CTNetworking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		CB108D401E7BBCBD00D80842 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = YG7RVX9QWP;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		CB108D411E7BBCBD00D80842 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = YG7RVX9QWP;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		CB9807F11E7A6D4200465168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		CB9807F41E7A6D4200465168 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = YG7RVX9QWP;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = CTNetworking/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.charlie.CTNetworking;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		CB108D3F1E7BBCBD00D80842 /* Build configuration list for PBXAggregateTarget "OutputFw" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB108D401E7BBCBD00D80842 /* Release */,
+				CB108D411E7BBCBD00D80842 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB9807E41E7A6D4200465168 /* Build configuration list for PBXProject "CTNetworking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB9807F11E7A6D4200465168 /* Release */,
+				CB108D3C1E7BBC5D00D80842 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CB9807F21E7A6D4200465168 /* Build configuration list for PBXNativeTarget "CTNetworking" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CB9807F41E7A6D4200465168 /* Release */,
+				CB108D3D1E7BBC5D00D80842 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = CB9807E11E7A6D4200465168 /* Project object */;
+}
