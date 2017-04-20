@@ -157,7 +157,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                 } fail:^(CTURLResponse *response) {
                     __strong typeof(weakSelf) strongSelf = weakSelf;
                     strongSelf.errorMessage = response.error.localizedDescription;
-                    if (NO)
+                    if (response.error.code == NSURLErrorTimedOut)
                         [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeTimeout];
                     else
                         [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeDefault];

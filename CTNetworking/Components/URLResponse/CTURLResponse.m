@@ -10,11 +10,14 @@
 #import "NSObject+AXNetworkingMethods.h"
 #import "NSURLRequest+CTNetworkingMethods.h"
 
-@interface CTURLResponse ()
+@interface CTURLResponse () {
+    NSString *_contentString;
+    id _content;
+}
 
 @property (nonatomic, assign, readwrite) CTURLResponseStatus status;
-@property (nonatomic, copy, readwrite) NSString *contentString;
-@property (nonatomic, copy, readwrite) id content;
+//@property (nonatomic, copy, readwrite) NSString *contentString;
+//@property (nonatomic, copy, readwrite) id content;
 @property (nonatomic, copy, readwrite) NSURLRequest *request;
 @property (nonatomic, assign, readwrite) NSInteger requestId;
 @property (nonatomic, copy, readwrite) NSData *responseData;
@@ -26,12 +29,11 @@
 @implementation CTURLResponse
 
 #pragma mark - life cycle
-- (instancetype)initWithResponseString:(NSString *)responseString requestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
+- (instancetype)initWithRequestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
 {
     self = [super init];
     if (self) {
-        self.contentString = responseString;
-        self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
+//        self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
         self.status = status;
         self.requestId = [requestId integerValue];
         self.request = request;
@@ -42,11 +44,11 @@
     return self;
 }
 
-- (instancetype)initWithResponseString:(NSString *)responseString requestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
+- (instancetype)initWithRequestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
 {
     self = [super init];
     if (self) {
-        self.contentString = [responseString CT_defaultValue:@""];
+//        self.contentString = [responseString CT_defaultValue:@""];
         self.status = [self responseStatusWithError:error];
         self.requestId = [requestId integerValue];
         self.request = request;
@@ -54,11 +56,11 @@
         self.requestParams = request.requestParams;
         self.isCache = NO;
         self.error = error;
-        if (responseData) {
-            self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
-        } else {
-            self.content = nil;
-        }
+//        if (responseData) {
+//            self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
+//        } else {
+//            self.content = nil;
+//        }
     }
     return self;
 }
@@ -67,12 +69,12 @@
 {
     self = [super init];
     if (self) {
-        self.contentString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//        self.contentString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         self.status = [self responseStatusWithError:nil];
         self.requestId = 0;
         self.request = nil;
         self.responseData = [data copy];
-        self.content = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:NULL];
+//        self.content = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:NULL];
         self.isCache = YES;
     }
     return self;
@@ -92,6 +94,22 @@
     } else {
         return CTURLResponseStatusSuccess;
     }
+}
+
+#pragma mark - get / set 
+
+- (NSString *)contentString {
+    if (_responseData != nil && _contentString == nil) {
+        _contentString = [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding];
+    }
+    return _contentString;
+}
+
+- (id)content {
+    if (_responseData != nil && _content == nil) {
+        _content = [NSJSONSerialization JSONObjectWithData:_responseData options:NSJSONReadingMutableContainers error:NULL];
+    }
+    return _content;
 }
 
 @end
