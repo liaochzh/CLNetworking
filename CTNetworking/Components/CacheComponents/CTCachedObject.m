@@ -23,12 +23,6 @@
     return self.content == nil;
 }
 
-- (BOOL)isOutdated
-{
-    NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.lastUpdateTime];
-    return timeInterval > 300;
-}
-
 - (void)setContent:(NSData *)content
 {
     _content = [content copy];
@@ -36,6 +30,7 @@
 }
 
 #pragma mark - life cycle
+
 - (instancetype)initWithContent:(NSData *)content
 {
     self = [super init];
@@ -45,7 +40,26 @@
     return self;
 }
 
+#pragma mark -
+
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:_content forKey:@"content"];
+    [aCoder encodeObject:_lastUpdateTime forKey:@"lastUpdateTime"];
+}
+
+- (nullable instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    if (self) {
+        _content = [aDecoder decodeObjectOfClass:[NSData class] forKey:@"content"];
+        _lastUpdateTime = [aDecoder decodeObjectOfClass:NSDate.class forKey:@"lastUpdateTime"];
+    }
+    return self;
+}
+
 #pragma mark - public method
+
 - (void)updateContent:(NSData *)content
 {
     self.content = content;

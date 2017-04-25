@@ -241,16 +241,44 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
 @required
 - (NSString *)methodName;
 - (CTAPIManagerRequestType)requestType;
-- (BOOL)shouldCache;
 - (CTService *)service;
 - (id<CTRequestGenerator>)requestGenerator;
 
 // used for pagable API Managers mainly
 @optional
+
+/**
+ 是否加载缓存数据（加载缓存将不再请求服务器）
+ */
+- (BOOL)shouldCache;
+
+/**
+ 缓存超时间隔(默认300秒)
+ */
+- (NSTimeInterval)cacheOutdatedInterval;
+
 - (void)cleanData;
 - (NSDictionary *)reformParams:(NSDictionary *)params;
 - (NSInteger)loadDataWithParams:(NSDictionary *)params;
+
+/**
+ 是否需要加载本地数据
+ */
 - (BOOL)shouldLoadFromNative;
+
+/**
+ 解密cache
+ @param cache 待解密的cache
+ @return 返回已解密的cache
+ */
+- (NSData*)decryptCache:(NSData*)cache;
+
+/**
+ 加密cache
+ @param cache 待加密的cache
+ @return 返回已加密的cache
+ */
+- (NSData*)encryptCache:(NSData*)cache;
 
 @end
 

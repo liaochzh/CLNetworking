@@ -83,32 +83,32 @@
     dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         NSNumber *requestID = @([dataTask taskIdentifier]);
         [self.dispatchTable removeObjectForKey:requestID];
-//        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+        //        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         
         // 检查http response是否成立。
         
         if (error) {
-//            NSString *responseString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-//            [CTLogger logDebugInfoWithResponse:httpResponse
-//                                  responseString:responseString
-//                                        request:request
-//                                          error:error];
+            //            NSString *responseString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
+            //            [CTLogger logDebugInfoWithResponse:httpResponse
+            //                                  responseString:responseString
+            //                                        request:request
+            //                                          error:error];
             CTURLResponse *CTResponse = [[CTURLResponse alloc] initWithRequestId:requestID request:request responseData:responseObject error:error];
             fail?fail(CTResponse):nil;
             
         } else {
             
             NSData *responseData;
-            if (request.decryptResponseContent) // 实现了解密，先解密
+            if (request.decryptResponseContent) // 实现解密block，先解密
                 responseData = request.decryptResponseContent(responseObject);
             else //
                 responseData = responseObject;
             
-//            NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-//            [CTLogger logDebugInfoWithResponse:httpResponse
-//                                  responseString:responseString
-//                                        request:request
-//                                          error:NULL];
+            //            NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            //            [CTLogger logDebugInfoWithResponse:httpResponse
+            //                                  responseString:responseString
+            //                                        request:request
+            //                                          error:NULL];
             CTURLResponse *CTResponse = [[CTURLResponse alloc] initWithRequestId:requestID request:request responseData:responseData status:CTURLResponseStatusSuccess];
             success?success(CTResponse):nil;
         }

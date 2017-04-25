@@ -18,15 +18,16 @@
                                  requestParams:(NSDictionary *)requestParams;
 
 
-
 - (NSData *)fetchCachedDataWithServiceIdentifier:(NSString *)serviceIdentifier
                                 methodName:(NSString *)methodName
-                             requestParams:(NSDictionary *)requestParams;
+                             requestParams:(NSDictionary *)requestParams
+                                outdatedInterval:(NSTimeInterval)interval;
 
 - (void)saveCacheWithData:(NSData *)cachedData
         serviceIdentifier:(NSString *)serviceIdentifier
                methodName:(NSString *)methodName
-            requestParams:(NSDictionary *)requestParams;
+            requestParams:(NSDictionary *)requestParams
+             inMemoryOnly:(BOOL)memoryOnly;
 
 - (void)deleteCacheWithServiceIdentifier:(NSString *)serviceIdentifier
                               methodName:(NSString *)methodName
@@ -34,8 +35,8 @@
 
 
 
-- (NSData *)fetchCachedDataWithKey:(NSString *)key;
-- (void)saveCacheWithData:(NSData *)cachedData key:(NSString *)key;
+- (NSData *)fetchCachedDataWithKey:(NSString *)key outdatedInterval:(NSTimeInterval)interval;
+- (void)saveCacheWithData:(NSData *)cachedData key:(NSString *)key inMemoryOnly:(BOOL)memoryOnly;
 - (void)deleteCacheWithKey:(NSString *)key;
 - (void)clean;
 

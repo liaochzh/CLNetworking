@@ -59,6 +59,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4E1D42D15E6F1BC1BB93A1E0 /* Pods-CTNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.release.xcconfig"; sourceTree = "<group>"; };
 		CB9807EA1E7A6D4200465168 /* CTNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CTNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB9807ED1E7A6D4200465168 /* CTNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTNetworking.h; sourceTree = "<group>"; };
@@ -115,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */,
+				4E1D42D15E6F1BC1BB93A1E0 /* Pods-CTNetworking.debug.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -411,7 +413,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		CB108D421E7BBD8600D80842 /* ShellScript */ = {
@@ -505,7 +507,7 @@
 		};
 		CB108D3D1E7BBC5D00D80842 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */;
+			baseConfigurationReference = 4E1D42D15E6F1BC1BB93A1E0 /* Pods-CTNetworking.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;

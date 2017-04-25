@@ -26,7 +26,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 
 @property (nonatomic, strong, readwrite) id fetchedRawData;
 @property (nonatomic, assign, readwrite) BOOL isLoading;
-@property (nonatomic, assign) BOOL isNativeDataEmpty;
+//@property (nonatomic, assign) BOOL isNativeDataEmpty;
 
 @property (nonatomic, copy, readwrite) NSString *errorMessage;
 @property (nonatomic, readwrite) CTAPIManagerErrorType errorType;
@@ -106,18 +106,22 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     if ([self shouldCallAPIWithParams:apiParams]) {
         if ([self.validator manager:self isCorrectWithParamsData:apiParams]) {
             
-            if ([self.child shouldLoadFromNative]) {
+            // 先检查一下是否需要读取缓存数据
+            if ([self.child shouldCache]) {
+                // 读取缓存数据
+                if ([self loadDataWithParams:apiParams]) {
+                    return 0;
+                }
+            }
+            
+            if ([self.child shouldLoadFromNative]) { // 本地缓存
                 [self loadDataFromNative:apiParams];
             }
             
-            // 先检查一下是否有缓存
-            if ([self shouldCache] && [self hasCacheWithParams:apiParams]) {
-                return 0;
-            }
-            
             // 实际的网络请求
-            if ([self isReachable]) {
-                self.isLoading = YES;
+            if ([self isReachable])
+            {
+                // 构建请求
                 NSURLRequest *request;
                 switch (self.child.requestType)
                 {
@@ -150,6 +154,9 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                     request.decryptResponseContent = [self.child.requestGenerator decryptResponseContent];
                 }
                 request.requestParams = apiParams;
+                
+                self.isLoading = YES;
+                
                 __weak typeof(self) weakSelf = self;
                 requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request success:^(CTURLResponse *response) {
                     __strong typeof(weakSelf) strongSelf = weakSelf;
@@ -185,45 +192,40 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 #pragma mark - api callbacks
 - (void)successedOnCallingAPI:(CTURLResponse *)response
 {
-    self.isLoading = NO;
     self.response = response;
-    
-    if ([self.child shouldLoadFromNative]) {
-        if (response.isCache == NO) {
-            NSString *key = [[self.child methodName] stringByAppendingString:response.requestParams.CT_jsonString].AX_md5;
-            NSString *cachesDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-            NSString *cachePath = [cachesDirectoryPath stringByAppendingPathComponent:key];
-            [response.responseData writeToFile:cachePath atomically:YES];
-            
-//            [[NSUserDefaults standardUserDefaults] setObject:response.responseData forKey:key];
-//            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
     
     if (response.content) {
         self.fetchedRawData = [response.content copy];
     } else {
         self.fetchedRawData = [response.responseData copy];
     }
-    [self removeRequestIdWithRequestID:response.requestId];
+    
     if ([self.validator manager:self isCorrectWithCallBackData:response.content]) {
         
-        if ([self shouldCache] && !response.isCache) {
-            [self.cache saveCacheWithData:response.responseData serviceIdentifier:self.child.service.serviceIdentifier methodName:self.child.methodName requestParams:response.requestParams];
+        if (response.isCache == NO) {  // 不是缓存数据
+            
+            self.isLoading = NO;
+            [self removeRequestIdWithRequestID:response.requestId];
+            
+            BOOL sc = [self.child shouldCache];
+            BOOL sn = [self.child shouldLoadFromNative];
+            
+            if (sc || sn) { // 需要缓存
+                BOOL memoryOnly = (sn == false); // 不需要本地缓存
+                NSData *cacheData = [self.child decryptCache:response.responseData];
+                [self.cache saveCacheWithData:cacheData serviceIdentifier:self.child.service.serviceIdentifier methodName:self.child.methodName requestParams:response.requestParams inMemoryOnly:memoryOnly];
+            }
         }
         
         if ([self beforePerformSuccessWithResponse:response]) {
-            if ([self.child shouldLoadFromNative]) {
-                if (response.isCache == YES) {
-                    [self.delegate managerCallAPIDidSuccess:self];
-                } else if (self.isNativeDataEmpty) {
-                    [self.delegate managerCallAPIDidSuccess:self];
-                }
+            if (response.isCache == YES) {
+                [self.delegate managerCallAPIDidSuccess:self];
             } else {
                 [self.delegate managerCallAPIDidSuccess:self];
             }
         }
         [self afterPerformSuccessWithResponse:response];
+        
     } else {
         [self failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeNoContent];
     }
@@ -231,16 +233,23 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 
 - (void)failedOnCallingAPI:(CTURLResponse *)response withErrorType:(CTAPIManagerErrorType)errorType
 {
-    self.isLoading = NO;
-    self.response = response;
-    
-    // 错误
-    self.errorType = errorType;
-    [self removeRequestIdWithRequestID:response.requestId];
-    if ([self beforePerformFailWithResponse:response]) {
-        [self.delegate managerCallAPIDidFailed:self];
+    // 错误的信息
+    // 没有请求服务器，就处理缓存数据
+    // 正在请求服务器，就不处理缓存数据
+    if ((self.isLoading && !response.isCache) ||
+        !self.isLoading)
+    {
+        self.isLoading = NO;
+        self.response = response;
+        
+        // 错误
+        self.errorType = errorType;
+        [self removeRequestIdWithRequestID:response.requestId];
+        if ([self beforePerformFailWithResponse:response]) {
+            [self.delegate managerCallAPIDidFailed:self];
+        }
+        [self afterPerformFailWithResponse:response];
     }
-    [self afterPerformFailWithResponse:response];
 }
 
 #pragma mark - method for interceptor
@@ -314,6 +323,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     self.fetchedRawData = nil;
     self.errorMessage = nil;
     self.errorType = CTAPIManagerErrorTypeDefault;
+    self.response = nil;
 }
 
 //如果需要在调用API之前额外添加一些参数，比如pageNumber和pageSize之类的就在这里添加
@@ -338,11 +348,6 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     }
 }
 
-- (BOOL)shouldCache
-{
-    return NO;
-}
-
 #pragma mark - private methods
 - (void)removeRequestIdWithRequestID:(NSInteger)requestId
 {
@@ -357,11 +362,13 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     }
 }
 
-- (BOOL)hasCacheWithParams:(NSDictionary *)params
+- (BOOL)loadCacheWithParams:(NSDictionary *)params
 {
     NSString *serviceIdentifier = self.child.service.serviceIdentifier;
     NSString *methodName = self.child.methodName;
-    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params];
+    CTService *service = self.child.service;
+    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:self.child.cacheOutdatedInterval];
+    result = [self.child decryptCache:result];
     
     if (result == nil) {
         return NO;
@@ -373,33 +380,32 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
         CTURLResponse *response = [[CTURLResponse alloc] initWithData:result];
         response.requestParams = params;
         
-        [CTLogger logDebugInfoWithCachedResponse:response methodName:methodName serviceIdentifier:self.child.service];
+        [CTLogger logDebugInfoWithCachedResponse:response methodName:methodName serviceIdentifier:service];
         [strongSelf successedOnCallingAPI:response];
     });
     return YES;
 }
 
-- (void)loadDataFromNative:(NSDictionary *)params
+- (BOOL)loadDataFromNative:(NSDictionary *)params
 {
-    NSString *key = [self.child.methodName stringByAppendingString:params.CT_jsonString].AX_md5;
-    NSString *cachesDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *cachePath = [cachesDirectoryPath stringByAppendingPathComponent:key];
-    NSData *result = [NSData dataWithContentsOfFile:cachePath];
+    NSString *serviceIdentifier = self.child.service.serviceIdentifier;
+    NSString *methodName = self.child.methodName;
+    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:31536000]; // 本地数据，最多就是一年
+    result = [self.child decryptCache:result];
     
-//    NSString *methodName = [self.child.methodName stringByAppendingPathComponent:[params CT_urlParamsStringSignature:NO]];
-//    NSData *result = [[NSUserDefaults standardUserDefaults] objectForKey:methodName];
-    
-    if (result) {
-        self.isNativeDataEmpty = NO;
-        __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            __strong typeof(weakSelf) strongSelf = weakSelf;
-            CTURLResponse *response = [[CTURLResponse alloc] initWithData:result];
-            [strongSelf successedOnCallingAPI:response];
-        });
-    } else {
-        self.isNativeDataEmpty = YES;
+    if (result == nil) {
+        return NO;
     }
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        __strong typeof (weakSelf) strongSelf = weakSelf;
+        CTURLResponse *response = [[CTURLResponse alloc] initWithData:result];
+        response.requestParams = params;
+        
+        [strongSelf successedOnCallingAPI:response];
+    });
+    return YES;
 }
 
 #pragma mark - getters and setters
@@ -439,6 +445,26 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 - (BOOL)shouldLoadFromNative
 {
     return NO;
+}
+
+- (NSData*)decryptCache:(NSData*)cache
+{
+    return cache;
+}
+
+- (NSData*)encryptCache:(NSData*)cache
+{
+    return cache;
+}
+
+- (BOOL)shouldCache
+{
+    return NO;
+}
+
+- (NSTimeInterval)cacheOutdatedInterval
+{
+    return 300;
 }
 
 @end
