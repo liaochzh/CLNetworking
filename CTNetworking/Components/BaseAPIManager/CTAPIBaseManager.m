@@ -109,7 +109,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
             // 先检查一下是否需要读取缓存数据
             if ([self.child shouldCache]) {
                 // 读取缓存数据
-                if ([self loadDataWithParams:apiParams]) {
+                if ([self loadCacheWithParams:apiParams]) {
                     return 0;
                 }
             }

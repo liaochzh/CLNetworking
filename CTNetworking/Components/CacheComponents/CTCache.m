@@ -46,8 +46,6 @@
                                    requestParams:(NSDictionary *)requestParams
                                 outdatedInterval:(NSTimeInterval)interval
 {
-    NSLog(@"fetchCachedDataWithServiceIdentifier->%@ %@ %@", serviceIdentifier, methodName, requestParams);
-    
     return [self fetchCachedDataWithKey:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] outdatedInterval:interval];
 }
 
@@ -57,7 +55,6 @@
             requestParams:(NSDictionary *)requestParams
              inMemoryOnly:(BOOL)memoryOnly
 {
-    NSLog(@"fetchCachedDataWithServiceIdentifier->%@ %@ %@", serviceIdentifier, methodName, requestParams);
     [self saveCacheWithData:cachedData key:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] inMemoryOnly:memoryOnly];
 }
 
