@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 // 所有CTService的派生类都要符合这个protocol
-@protocol CTServiceProtocol <NSObject>
+@protocol CTServiceProtocol 
 
 @property (nonatomic, readonly) NSString *offlineApiBaseUrl;
 @property (nonatomic, readonly) NSString *onlineApiBaseUrl;

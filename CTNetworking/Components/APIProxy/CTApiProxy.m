@@ -73,7 +73,7 @@
 }
 
 /** 这个函数存在的意义在于，如果将来要把AFNetworking换掉，只要修改这个函数的实现即可。 */
-- (NSUInteger)callApiWithRequest:(NSURLRequest *)request success:(AXCallback)success fail:(AXCallback)fail
+- (NSUInteger)callApiWithRequest:(NSURLRequest *)request decrypt:(DecryptContent)decrypt success:(AXCallback)success fail:(AXCallback)fail
 {
     
     NSLog(@"\n==================================\n\nRequest Start: \n\n %@\n\n==================================", request.URL);
@@ -99,9 +99,9 @@
         } else {
             
             NSData *responseData;
-            if (request.decryptResponseContent) // 实现解密block，先解密
-                responseData = request.decryptResponseContent(responseObject);
-            else //
+            if (decrypt) // 实现解密block，先解密
+                responseData = decrypt(responseObject);
+            else
                 responseData = responseObject;
             
             //            NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];

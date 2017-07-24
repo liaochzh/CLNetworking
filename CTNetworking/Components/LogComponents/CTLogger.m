@@ -124,7 +124,7 @@
     [actionDict addEntriesFromDictionary:[CTCommonParamsGenerator commonParamsDictionaryForLog]];
     NSDictionary *logJsonDict = @{self.configParams.sendActionKey:[@[actionDict] AX_jsonString]};
     NSURLRequest *request = [self.configParams.requestGenerator generatePOSTRequestWithServiceIdentifier:self.configParams.service requestParams:logJsonDict methodName:self.configParams.sendActionMethod];
-    [[CTApiProxy sharedInstance] callApiWithRequest:request success:nil fail:nil];
+    [[CTApiProxy sharedInstance] callApiWithRequest:request decrypt:nil success:nil fail:nil];
 }
 
 @end

@@ -18,7 +18,4 @@
 
 - (nullable NSURLRequest *)generateDeleteRequestWithServiceIdentifier:(nonnull CTService*)service requestParams:(nullable NSDictionary *)requestParams methodName:(nonnull NSString *)methodName;
 
-@optional
-- (NSData* _Nullable(^ _Nullable)( NSData* _Nullable))decryptResponseContent;
-
 @end

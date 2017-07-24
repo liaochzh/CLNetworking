@@ -150,25 +150,36 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                     return requestId;
                 }
                 
-                if ([self.child.requestGenerator respondsToSelector:@selector(decryptResponseContent)]) {
-                    request.decryptResponseContent = [self.child.requestGenerator decryptResponseContent];
-                }
                 request.requestParams = apiParams;
                 
                 self.isLoading = YES;
                 
                 __weak typeof(self) weakSelf = self;
-                requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request success:^(CTURLResponse *response) {
-                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                    [strongSelf successedOnCallingAPI:response];
-                } fail:^(CTURLResponse *response) {
-                    __strong typeof(weakSelf) strongSelf = weakSelf;
-                    strongSelf.errorMessage = response.error.localizedDescription;
-                    if (response.error.code == NSURLErrorTimedOut)
-                        [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeTimeout];
-                    else
-                        [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeDefault];
-                }];
+                requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request decrypt:
+                             // 解密回调
+                             ^NSData *(NSData *content)
+                             {
+                                 __strong typeof(weakSelf) strongSelf = weakSelf;
+                                 return [strongSelf.child decryptResponse:content];
+                                 
+                             } success:
+                             // 成功回调
+                             ^(CTURLResponse *response)
+                             {
+                                 __strong typeof(weakSelf) strongSelf = weakSelf;
+                                 [strongSelf successedOnCallingAPI:response];
+                                 
+                             } fail:
+                             // 失败回调
+                             ^(CTURLResponse *response)
+                             {
+                                 __strong typeof(weakSelf) strongSelf = weakSelf;
+                                 strongSelf.errorMessage = response.error.localizedDescription;
+                                 if (response.error.code == NSURLErrorTimedOut)
+                                     [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeTimeout];
+                                 else
+                                     [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeDefault];
+                             }];
                 
                 [self.requestIdList addObject:@(requestId)];
                 
@@ -447,11 +458,19 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     return NO;
 }
 
+/// 解密Response 内容
+- (NSData*)decryptResponse:(NSData*)response
+{
+    return response;
+}
+
+/// 本地存储解密
 - (NSData*)decryptCache:(NSData*)cache
 {
     return cache;
 }
 
+/// 本地存储加密
 - (NSData*)encryptCache:(NSData*)cache
 {
     return cache;

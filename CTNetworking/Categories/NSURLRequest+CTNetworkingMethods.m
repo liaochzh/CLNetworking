@@ -10,7 +10,6 @@
 #import <objc/runtime.h>
 
 static void *CTNetworkingRequestParams;
-static void *CTNetworkingDecryptRespContent;
 
 @implementation NSURLRequest (CTNetworkingMethods)
 
@@ -22,16 +21,6 @@ static void *CTNetworkingDecryptRespContent;
 - (NSDictionary *)requestParams
 {
     return objc_getAssociatedObject(self, &CTNetworkingRequestParams);
-}
-
-- (void)setDecryptResponseContent:(NSData *(^)(NSData *))decryptResponseContent
-{
-    objc_setAssociatedObject(self, &CTNetworkingDecryptRespContent, decryptResponseContent, OBJC_ASSOCIATION_COPY);
-}
-
-- (NSData *(^)(NSData *))decryptResponseContent
-{
-    return objc_getAssociatedObject(self, &CTNetworkingDecryptRespContent);
 }
 
 @end

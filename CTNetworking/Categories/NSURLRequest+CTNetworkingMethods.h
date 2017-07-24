@@ -11,6 +11,5 @@
 @interface NSURLRequest (CTNetworkingMethods)
 
 @property (nonatomic, copy) NSDictionary *requestParams;
-@property (nonatomic, copy) NSData* (^decryptResponseContent)(NSData*);
 
 @end
