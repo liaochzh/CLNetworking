@@ -11,32 +11,32 @@
 // 所有CTService的派生类都要符合这个protocol
 @protocol CTServiceProtocol 
 
-@property (nonatomic, readonly) NSString *offlineApiBaseUrl;
-@property (nonatomic, readonly) NSString *onlineApiBaseUrl;
+@property (nonatomic, readonly, nonnull) NSString *offlineApiBaseUrl;
+@property (nonatomic, readonly, nonnull) NSString *onlineApiBaseUrl;
 
 @optional
 
 @property (nonatomic, readonly) BOOL isOnline;
 
-@property (nonatomic, readonly) NSString *offlineApiVersion;
-@property (nonatomic, readonly) NSString *onlineApiVersion;
+@property (nonatomic, readonly, nonnull) NSString *offlineApiVersion;
+@property (nonatomic, readonly, nonnull) NSString *onlineApiVersion;
 
-@property (nonatomic, readonly) NSString *onlinePublicKey;
-@property (nonatomic, readonly) NSString *offlinePublicKey;
+@property (nonatomic, readonly, nonnull) NSString *onlinePublicKey;
+@property (nonatomic, readonly, nonnull) NSString *offlinePublicKey;
 
-@property (nonatomic, readonly) NSString *onlinePrivateKey;
-@property (nonatomic, readonly) NSString *offlinePrivateKey;
+@property (nonatomic, readonly, nonnull) NSString *onlinePrivateKey;
+@property (nonatomic, readonly, nonnull) NSString *offlinePrivateKey;
 
 @end
 
 @interface CTService : NSObject
 
-@property (nonatomic, readonly) NSString *serviceIdentifier;
-@property (nonatomic, strong, readonly) NSString *publicKey;
-@property (nonatomic, strong, readonly) NSString *privateKey;
-@property (nonatomic, strong, readonly) NSString *apiBaseUrl;
-@property (nonatomic, strong, readonly) NSString *apiVersion;
+@property (nonatomic, readonly, nonnull) NSString *serviceIdentifier;
+@property (nonatomic, strong, readonly, nonnull) NSString *publicKey;
+@property (nonatomic, strong, readonly, nonnull) NSString *privateKey;
+@property (nonatomic, strong, readonly, nonnull) NSString *apiBaseUrl;
+@property (nonatomic, strong, readonly, nonnull) NSString *apiVersion;
 
-@property (nonatomic, weak) id<CTServiceProtocol> child;
+@property (nonatomic, weak, nullable) id<CTServiceProtocol> child;
 
 @end

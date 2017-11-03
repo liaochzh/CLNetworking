@@ -14,7 +14,7 @@
 @class CTAPIBaseManager;
 
 /// 在调用成功之后的params字典里面，用这个key可以取出requestID
-extern NSString * const kCTAPIBaseManagerRequestID;
+extern NSString * _Nonnull const kCTAPIBaseManagerRequestID;
 
 
 
@@ -51,8 +51,8 @@ extern NSString * const kCTAPIBaseManagerRequestID;
 //api回调
 @protocol CTAPIManagerCallBackDelegate
 @required
-- (void)managerCallAPIDidSuccess:(CTAPIBaseManager *)manager;
-- (void)managerCallAPIDidFailed:(CTAPIBaseManager *)manager;
+- (void)managerCallAPIDidSuccess:(CTAPIBaseManager * _Nonnull)manager;
+- (void)managerCallAPIDidFailed:(CTAPIBaseManager * _Nonnull)manager;
 @end
 
 
@@ -143,7 +143,7 @@ extern NSString * const kCTAPIBaseManagerRequestID;
  }
  }
  */
-- (id)manager:(CTAPIBaseManager *)manager reformData:(id)data;
+- (id _Nullable)manager:(CTAPIBaseManager * _Nonnull)manager reformData:(id _Nullable)data;
 @end
 
 
@@ -173,7 +173,7 @@ extern NSString * const kCTAPIBaseManagerRequestID;
  因为判断逻辑都在这里做掉了。
  而且本来判断返回数据是否正确的逻辑就应该交给manager去做，不要放到回调到controller的delegate方法里面去做。
  */
-- (BOOL)manager:(CTAPIBaseManager *)manager isCorrectWithCallBackData:(NSDictionary *)data;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager isCorrectWithCallBackData:(id _Nullable)data;
 
 /*
  
@@ -187,7 +187,7 @@ extern NSString * const kCTAPIBaseManagerRequestID;
  不过我还是建议认真写完这个参数验证，这样能够省去将来代码维护者很多的时间。
  
  */
-- (BOOL)manager:(CTAPIBaseManager *)manager isCorrectWithParamsData:(NSDictionary *)data;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager isCorrectWithParamsData:(NSDictionary <NSString*,id>* _Nullable)data;
 @end
 
 
@@ -200,7 +200,7 @@ extern NSString * const kCTAPIBaseManagerRequestID;
 //让manager能够获取调用API所需要的数据
 @protocol CTAPIManagerParamSource
 @required
-- (NSDictionary *)paramsForApi:(CTAPIBaseManager *)manager;
+- (NSDictionary * _Nullable)paramsForApi:(CTAPIBaseManager * _Nonnull)manager;
 @end
 
 /*
@@ -239,10 +239,10 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
 @protocol CTAPIManager <NSObject>
 
 @required
-- (NSString *)methodName;
+- (NSString * _Nonnull)methodName;
 - (CTAPIManagerRequestType)requestType;
-- (CTService *)service;
-- (id<CTRequestGenerator>)requestGenerator;
+- (CTService * _Nonnull)service;
+- (id<CTRequestGenerator> _Nonnull)requestGenerator;
 
 // used for pagable API Managers mainly
 @optional
@@ -258,7 +258,8 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
 - (NSTimeInterval)cacheOutdatedInterval;
 
 - (void)cleanData;
-- (NSDictionary *)reformParams:(NSDictionary *)params;
+
+- (NSDictionary <NSString*,id>* _Nullable)reformParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 /**
  是否需要加载本地数据
@@ -270,21 +271,21 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
  @param response 待解密的Response
  @return 返回已解密的Response
  */
-- (NSData*)decryptResponse:(NSData*)response;
+- (NSData *_Nullable)decryptResponse:(NSData* _Nullable)response;
 
 /**
  本地存储解密cache
  @param cache 待解密的cache
  @return 返回已解密的cache
  */
-- (NSData*)decryptCache:(NSData*)cache;
+- (NSData* _Nullable)decryptCache:(NSData* _Nullable)cache;
 
 /**
  本地存储加密cache(确保数据存储的安全性)
  @param cache 待加密的cache
  @return 返回已加密的cache
  */
-- (NSData*)encryptCache:(NSData*)cache;
+- (NSData* _Nullable)encryptCache:(NSData* _Nullable)cache;
 
 @end
 
@@ -302,14 +303,14 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
 @protocol CTAPIManagerInterceptor <NSObject>
 
 @optional
-- (BOOL)manager:(CTAPIBaseManager *)manager beforePerformSuccessWithResponse:(CTURLResponse *)response;
-- (void)manager:(CTAPIBaseManager *)manager afterPerformSuccessWithResponse:(CTURLResponse *)response;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager beforePerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
+- (void)manager:(CTAPIBaseManager * _Nonnull)manager afterPerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)manager:(CTAPIBaseManager *)manager beforePerformFailWithResponse:(CTURLResponse *)response;
-- (void)manager:(CTAPIBaseManager *)manager afterPerformFailWithResponse:(CTURLResponse *)response;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager beforePerformFailWithResponse:(CTURLResponse *_Nonnull)response;
+- (void)manager:(CTAPIBaseManager * _Nonnull)manager afterPerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)manager:(CTAPIBaseManager *)manager shouldCallAPIWithParams:(NSDictionary *)params;
-- (void)manager:(CTAPIBaseManager *)manager afterCallingAPIWithParams:(NSDictionary *)params;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager shouldCallAPIWithParams:(NSDictionary * _Nullable)params;
+- (void)manager:(CTAPIBaseManager * _Nonnull)manager afterCallingAPIWithParams:(NSDictionary * _Nullable)params;
 
 @end
 
@@ -321,41 +322,41 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
 /*************************************************************************************************/
 @interface CTAPIBaseManager : NSObject
 
-@property (nonatomic, weak) id<CTAPIManagerCallBackDelegate> delegate;
-@property (nonatomic, weak) id<CTAPIManagerParamSource> paramSource;
-@property (nonatomic, weak) id<CTAPIManagerValidator> validator;
-@property (nonatomic, weak) NSObject<CTAPIManager> *child; //里面会调用到NSObject的方法，所以这里不用id
-@property (nonatomic, weak) id<CTAPIManagerInterceptor> interceptor;
+@property (nonatomic, weak, nullable) id<CTAPIManagerCallBackDelegate> delegate;
+@property (nonatomic, weak, nullable) id<CTAPIManagerParamSource> paramSource;
+@property (nonatomic, weak, nullable) id<CTAPIManagerValidator> validator;
+@property (nonatomic, weak, nullable) NSObject<CTAPIManager> *child; //里面会调用到NSObject的方法，所以这里不用id
+@property (nonatomic, weak, nullable) id<CTAPIManagerInterceptor> interceptor;
 
 /*
  baseManager是不会去设置errorMessage的，派生的子类manager可能需要给controller提供错误信息。所以为了统一外部调用的入口，设置了这个变量。
  派生的子类需要通过extension来在保证errorMessage在对外只读的情况下使派生的manager子类对errorMessage具有写权限。
  */
-@property (nonatomic, copy, readonly) NSString *errorMessage;
+@property (nonatomic, copy, readonly, nullable) NSString *errorMessage;
 @property (nonatomic, readonly) CTAPIManagerErrorType errorType;
-@property (nonatomic, strong) CTURLResponse *response;
+@property (nonatomic, strong, nullable) CTURLResponse *response;
 
 @property (nonatomic, assign, readonly) BOOL isReachable;
 @property (nonatomic, assign, readonly) BOOL isLoading;
 
-- (id)fetchDataWithReformer:(id<CTAPIManagerDataReformer>)reformer;
+- (id _Nullable)fetchDataWithReformer:(id<CTAPIManagerDataReformer> _Nullable)reformer;
 
 /// 尽量使用loadData这个方法,这个方法会通过param source来获得参数，这使得参数的生成逻辑位于controller中的固定位置
 - (NSInteger)loadData;
-- (NSInteger)loadDataWithParams:(NSDictionary *)params;
+- (NSInteger)loadDataWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 - (void)cancelAllRequests;
 - (void)cancelRequestWithRequestId:(NSInteger)requestID;
 
 // 拦截器方法，继承之后需要调用一下super
-- (BOOL)beforePerformSuccessWithResponse:(CTURLResponse *)response;
-- (void)afterPerformSuccessWithResponse:(CTURLResponse *)response;
+- (BOOL)beforePerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
+- (void)afterPerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)beforePerformFailWithResponse:(CTURLResponse *)response;
-- (void)afterPerformFailWithResponse:(CTURLResponse *)response;
+- (BOOL)beforePerformFailWithResponse:(CTURLResponse *_Nonnull)response;
+- (void)afterPerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)shouldCallAPIWithParams:(NSDictionary *)params;
-- (void)afterCallingAPIWithParams:(NSDictionary *)params;
+- (BOOL)shouldCallAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
+- (void)afterCallingAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 /*
  用于给继承的类做重载，在调用API之前额外添加一些参数,但不应该在这个函数里面修改已有的参数。
@@ -373,6 +374,6 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
  具体请参考AJKHDXFLoupanCategoryRecommendSamePriceAPIManager和AJKHDXFLoupanCategoryRecommendSameAreaAPIManager
  
  */
-- (NSDictionary *)reformParams:(NSDictionary *)params;
+- (NSDictionary <NSString*,id>* _Nullable)reformParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 @end

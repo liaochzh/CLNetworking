@@ -7,7 +7,7 @@
 //
 
 #import "CTSignatureGenerator.h"
-#import "CTCommonParamsGenerator.h"
+//#import "CTCommonParamsGenerator.h"
 #import "NSDictionary+AXNetworkingMethods.h"
 #import "NSString+AXNetworkingMethods.h"
 #import "NSArray+AXNetworkingMethods.h"
