@@ -34,7 +34,9 @@
             obj = [NSString stringWithFormat:@"%@", obj];
         }
         if (!isForSignature) {
-            obj = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(NULL,  (CFStringRef)obj,  NULL,  (CFStringRef)@"!*'();:@&;=+$,/?%#[]",  kCFStringEncodingUTF8));
+            NSString *charactersToEscape = @"!*'();:@&;=+$,/?%#[]";
+            NSCharacterSet *allowedCharacters = [[NSCharacterSet characterSetWithCharactersInString:charactersToEscape] invertedSet];
+            obj = [obj stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacters];
         }
         if ([obj length] > 0) {
             [result addObject:[NSString stringWithFormat:@"%@=%@", key, obj]];

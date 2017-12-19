@@ -152,6 +152,8 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                 
                 request.requestParams = apiParams;
                 
+                [CTLogger logDebugInfoWithRequest:request apiName:nil service:self.child.service requestParams:apiParams httpMethod:request.HTTPMethod];
+                
                 self.isLoading = YES;
                 
                 __weak typeof(self) weakSelf = self;

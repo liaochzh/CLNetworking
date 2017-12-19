@@ -22,6 +22,12 @@
 
 /* Begin PBXBuildFile section */
 		9693261476AE67A79C4770FA /* Pods_CTNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C7AEEE49CFB4F3E7CE61E9 /* Pods_CTNetworking.framework */; };
+		CB7584591FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = CB7584581FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB75845B1FE0C73C0037F72D /* CTAPIManagerDataReformer.h in Headers */ = {isa = PBXBuildFile; fileRef = CB75845A1FE0C73C0037F72D /* CTAPIManagerDataReformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB75845D1FE0C7890037F72D /* CTAPIManagerValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB75845C1FE0C7890037F72D /* CTAPIManagerValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB75845F1FE0C8700037F72D /* CTAPIManagerParamSource.h in Headers */ = {isa = PBXBuildFile; fileRef = CB75845E1FE0C8700037F72D /* CTAPIManagerParamSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB7584611FE0C9610037F72D /* CTAPIManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CB7584601FE0C9610037F72D /* CTAPIManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CB7584631FE0C9FA0037F72D /* CTAPIManagerInterceptor.h in Headers */ = {isa = PBXBuildFile; fileRef = CB7584621FE0C9FA0037F72D /* CTAPIManagerInterceptor.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB9807EF1E7A6D4200465168 /* CTNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9807ED1E7A6D4200465168 /* CTNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB9808761E7A6E0200465168 /* NSArray+AXNetworkingMethods.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9807FC1E7A6E0200465168 /* NSArray+AXNetworkingMethods.h */; };
 		CB9808771E7A6E0200465168 /* NSArray+AXNetworkingMethods.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9807FD1E7A6E0200465168 /* NSArray+AXNetworkingMethods.m */; };
@@ -43,10 +49,8 @@
 		CB9808871E7A6E0200465168 /* CTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808111E7A6E0200465168 /* CTCache.m */; };
 		CB9808881E7A6E0200465168 /* CTCachedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808121E7A6E0200465168 /* CTCachedObject.h */; };
 		CB9808891E7A6E0200465168 /* CTCachedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808131E7A6E0200465168 /* CTCachedObject.m */; };
-		CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808161E7A6E0200465168 /* CTLogger.h */; };
+		CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808161E7A6E0200465168 /* CTLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB98088B1E7A6E0200465168 /* CTLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808171E7A6E0200465168 /* CTLogger.m */; };
-		CB98088C1E7A6E0200465168 /* CTLoggerConfiguration.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808181E7A6E0200465168 /* CTLoggerConfiguration.h */; };
-		CB98088D1E7A6E0200465168 /* CTLoggerConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808191E7A6E0200465168 /* CTLoggerConfiguration.m */; };
 		CB98088E1E7A6E0200465168 /* CTURLResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98081B1E7A6E0200465168 /* CTURLResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB98088F1E7A6E0200465168 /* CTURLResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98081C1E7A6E0200465168 /* CTURLResponse.m */; };
 		CB9808911E7A6E0200465168 /* CTCommonParamsGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98086B1E7A6E0200465168 /* CTCommonParamsGenerator.h */; };
@@ -61,6 +65,12 @@
 /* Begin PBXFileReference section */
 		4E1D42D15E6F1BC1BB93A1E0 /* Pods-CTNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		CB7584581FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerCallBackDelegate.h; sourceTree = "<group>"; };
+		CB75845A1FE0C73C0037F72D /* CTAPIManagerDataReformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerDataReformer.h; sourceTree = "<group>"; };
+		CB75845C1FE0C7890037F72D /* CTAPIManagerValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerValidator.h; sourceTree = "<group>"; };
+		CB75845E1FE0C8700037F72D /* CTAPIManagerParamSource.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerParamSource.h; sourceTree = "<group>"; };
+		CB7584601FE0C9610037F72D /* CTAPIManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManager.h; sourceTree = "<group>"; };
+		CB7584621FE0C9FA0037F72D /* CTAPIManagerInterceptor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerInterceptor.h; sourceTree = "<group>"; };
 		CB9807EA1E7A6D4200465168 /* CTNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = CTNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB9807ED1E7A6D4200465168 /* CTNetworking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTNetworking.h; sourceTree = "<group>"; };
 		CB9807EE1E7A6D4200465168 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -205,6 +215,12 @@
 			children = (
 				CB98080D1E7A6E0200465168 /* CTAPIBaseManager.h */,
 				CB98080E1E7A6E0200465168 /* CTAPIBaseManager.m */,
+				CB7584581FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h */,
+				CB75845A1FE0C73C0037F72D /* CTAPIManagerDataReformer.h */,
+				CB75845C1FE0C7890037F72D /* CTAPIManagerValidator.h */,
+				CB75845E1FE0C8700037F72D /* CTAPIManagerParamSource.h */,
+				CB7584601FE0C9610037F72D /* CTAPIManager.h */,
+				CB7584621FE0C9FA0037F72D /* CTAPIManagerInterceptor.h */,
 			);
 			path = BaseAPIManager;
 			sourceTree = "<group>";
@@ -294,8 +310,10 @@
 			files = (
 				CB98087E1E7A6E0200465168 /* NSString+AXNetworkingMethods.h in Headers */,
 				CB9808931E7A6E0200465168 /* CTRequestGenerator.h in Headers */,
-				CB98088C1E7A6E0200465168 /* CTLoggerConfiguration.h in Headers */,
+				CB7584631FE0C9FA0037F72D /* CTAPIManagerInterceptor.h in Headers */,
+				CB75845F1FE0C8700037F72D /* CTAPIManagerParamSource.h in Headers */,
 				CB9808941E7A6E0200465168 /* CTSignatureGenerator.h in Headers */,
+				CB75845B1FE0C73C0037F72D /* CTAPIManagerDataReformer.h in Headers */,
 				CB98087C1E7A6E0200465168 /* NSObject+AXNetworkingMethods.h in Headers */,
 				CB9808961E7A6E0200465168 /* CTService.h in Headers */,
 				CB9807EF1E7A6D4200465168 /* CTNetworking.h in Headers */,
@@ -303,8 +321,11 @@
 				CB9808861E7A6E0200465168 /* CTCache.h in Headers */,
 				CB9808881E7A6E0200465168 /* CTCachedObject.h in Headers */,
 				CB9808781E7A6E0200465168 /* NSDictionary+AXNetworkingMethods.h in Headers */,
+				CB75845D1FE0C7890037F72D /* CTAPIManagerValidator.h in Headers */,
+				CB7584591FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h in Headers */,
 				CB9808911E7A6E0200465168 /* CTCommonParamsGenerator.h in Headers */,
 				CB98088E1E7A6E0200465168 /* CTURLResponse.h in Headers */,
+				CB7584611FE0C9610037F72D /* CTAPIManager.h in Headers */,
 				CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */,
 				CB9808821E7A6E0200465168 /* CTApiProxy.h in Headers */,
 				CB9808841E7A6E0200465168 /* CTAPIBaseManager.h in Headers */,
@@ -451,7 +472,6 @@
 				CB9808871E7A6E0200465168 /* CTCache.m in Sources */,
 				CB98088F1E7A6E0200465168 /* CTURLResponse.m in Sources */,
 				CB9808771E7A6E0200465168 /* NSArray+AXNetworkingMethods.m in Sources */,
-				CB98088D1E7A6E0200465168 /* CTLoggerConfiguration.m in Sources */,
 				CB98087F1E7A6E0200465168 /* NSString+AXNetworkingMethods.m in Sources */,
 				CB9808971E7A6E0200465168 /* CTService.m in Sources */,
 				CB9808831E7A6E0200465168 /* CTApiProxy.m in Sources */,
@@ -503,9 +523,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-fembed-bitcode";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -520,13 +541,14 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = YG7RVX9QWP;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CTNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlie.CTNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -591,8 +613,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_CFLAGS = "-fembed-bitcode";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -607,13 +630,14 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = YES;
+				DEPLOYMENT_POSTPROCESSING = YES;
 				DEVELOPMENT_TEAM = YG7RVX9QWP;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = CTNetworking/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.charlie.CTNetworking;
 				PRODUCT_NAME = "$(TARGET_NAME)";

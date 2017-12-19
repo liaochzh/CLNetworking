@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "CTService.h"
-#import "CTLoggerConfiguration.h"
+//#import "CTLoggerConfiguration.h"
 #import "CTURLResponse.h"
 
 
 @interface CTLogger : NSObject
 
-@property (nonatomic, strong, readonly) CTLoggerConfiguration *configParams;
+//@property (nonatomic, strong, readonly) CTLoggerConfiguration *configParams;
+@property (nonatomic, assign) BOOL isDebug;
+
++ (instancetype)sharedInstance;
 
 + (void)logDebugInfoWithRequest:(NSURLRequest *)request apiName:(NSString *)apiName service:(CTService *)service requestParams:(id)requestParams httpMethod:(NSString *)httpMethod;
 
@@ -22,7 +25,6 @@
 
 + (void)logDebugInfoWithCachedResponse:(CTURLResponse *)response methodName:(NSString *)methodName serviceIdentifier:(CTService *)service;
 
-+ (instancetype)sharedInstance;
-- (void)logWithActionCode:(NSString *)actionCode params:(NSDictionary *)params;
+//- (void)logWithActionCode:(NSString *)actionCode params:(NSDictionary *)params;
 
 @end

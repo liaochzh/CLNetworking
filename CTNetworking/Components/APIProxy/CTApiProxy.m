@@ -17,7 +17,7 @@
 @interface CTApiProxy ()
 
 @property (nonatomic, strong) NSMutableDictionary *dispatchTable;
-@property (nonatomic, strong) NSNumber *recordedRequestId;
+//@property (nonatomic, strong) NSNumber *recordedRequestId;
 
 //AFNetworking stuff
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
@@ -39,8 +39,8 @@
     if (_sessionManager == nil) {
         _sessionManager = [AFHTTPSessionManager manager];
         _sessionManager.responseSerializer = [AFHTTPResponseSerializer serializer];
-        _sessionManager.securityPolicy.allowInvalidCertificates = YES;
-        _sessionManager.securityPolicy.validatesDomainName = NO;
+        //        _sessionManager.securityPolicy.allowInvalidCertificates = YES;
+        //        _sessionManager.securityPolicy.validatesDomainName = NO;
     }
     return _sessionManager;
 }
@@ -75,51 +75,34 @@
 /** 这个函数存在的意义在于，如果将来要把AFNetworking换掉，只要修改这个函数的实现即可。 */
 - (NSUInteger)callApiWithRequest:(NSURLRequest *)request decrypt:(DecryptContent)decrypt success:(AXCallback)success fail:(AXCallback)fail
 {
-    
-    NSLog(@"\n==================================\n\nRequest Start: \n\n %@\n\n==================================", request.URL);
-    
     // 跑到这里的block的时候，就已经是主线程了。
-    __block NSURLSessionDataTask *dataTask = nil;
-    dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        NSNumber *requestID = @([dataTask taskIdentifier]);
+    NSURLSessionDataTask *dataTask = nil;
+    __block NSNumber *requestID;
+    
+    dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, NSData *responseObject, NSError *error) {
+        // 队列移除
         [self.dispatchTable removeObjectForKey:requestID];
-        //        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
         
+        // 没错误 和 实现解密block 就进行解密 否则 就直接返回
+        NSData *responseData = (error==nil && decrypt!=nil) ? decrypt(responseObject):responseObject;
         // 检查http response是否成立。
+        // 构建Response
+        CTURLResponse *CTResponse = [[CTURLResponse alloc] initWithRequestId:requestID request:request responseData:responseData error:error];
+        //
+        [CTLogger logDebugInfoWithResponse:(NSHTTPURLResponse*)response responseString:CTResponse.contentString request:request error:error];
         
-        if (error) {
-            //            NSString *responseString = [[NSString alloc] initWithData:responseObject encoding:NSUTF8StringEncoding];
-            //            [CTLogger logDebugInfoWithResponse:httpResponse
-            //                                  responseString:responseString
-            //                                        request:request
-            //                                          error:error];
-            CTURLResponse *CTResponse = [[CTURLResponse alloc] initWithRequestId:requestID request:request responseData:responseObject error:error];
+        if (error) // 失败回调
             fail?fail(CTResponse):nil;
-            
-        } else {
-            
-            NSData *responseData;
-            if (decrypt) // 实现解密block，先解密
-                responseData = decrypt(responseObject);
-            else
-                responseData = responseObject;
-            
-            //            NSString *responseString = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            //            [CTLogger logDebugInfoWithResponse:httpResponse
-            //                                  responseString:responseString
-            //                                        request:request
-            //                                          error:NULL];
-            CTURLResponse *CTResponse = [[CTURLResponse alloc] initWithRequestId:requestID request:request responseData:responseData status:CTURLResponseStatusSuccess];
+        else // 成功回调
             success?success(CTResponse):nil;
-        }
     }];
     
-    NSUInteger requestId = [dataTask taskIdentifier];
+    requestID = @(dataTask.taskIdentifier);
     
-    self.dispatchTable[@(requestId)] = dataTask;
+    self.dispatchTable[requestID] = dataTask;
     [dataTask resume];
     
-    return requestId;
+    return requestID.unsignedIntegerValue;
 }
 
 @end

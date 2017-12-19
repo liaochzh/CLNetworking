@@ -17,9 +17,16 @@ FOUNDATION_EXPORT const unsigned char CTNetworkingVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <CTNetworking/PublicHeader.h>
 
 #import <CTNetworking/CTAPIBaseManager.h>
+#import <CTNetworking/CTLogger.h>
 #import <CTNetworking/CTRequestGenerator.h>
 #import <CTNetworking/CTSignatureGenerator.h>
 #import <CTNetworking/CTService.h>
 #import <CTNetworking/CTURLResponse.h>
+#import <CTNetworking/CTAPIManagerCallBackDelegate.h>
+#import <CTNetworking/CTAPIManagerDataReformer.h>
+#import <CTNetworking/CTAPIManagerValidator.h>
+#import <CTNetworking/CTAPIManagerParamSource.h>
+#import <CTNetworking/CTAPIManager.h>
+#import <CTNetworking/CTAPIManagerInterceptor.h>
 
 

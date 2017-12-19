@@ -33,7 +33,6 @@
 {
     self = [super init];
     if (self) {
-//        self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
         self.status = status;
         self.requestId = [requestId integerValue];
         self.request = request;
@@ -46,22 +45,9 @@
 
 - (instancetype)initWithRequestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
 {
-    self = [super init];
-    if (self) {
-//        self.contentString = [responseString CT_defaultValue:@""];
-        self.status = [self responseStatusWithError:error];
-        self.requestId = [requestId integerValue];
-        self.request = request;
-        self.responseData = responseData;
-        self.requestParams = request.requestParams;
-        self.isCache = NO;
+    CTURLResponseStatus status = [[self class] responseStatusWithError:error];
+    if (self = [self initWithRequestId:requestId request:request responseData:responseData status:status])
         self.error = error;
-//        if (responseData) {
-//            self.content = [NSJSONSerialization JSONObjectWithData:responseData options:NSJSONReadingMutableContainers error:NULL];
-//        } else {
-//            self.content = nil;
-//        }
-    }
     return self;
 }
 
@@ -69,27 +55,25 @@
 {
     self = [super init];
     if (self) {
-//        self.contentString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        self.status = [self responseStatusWithError:nil];
+        self.status = CTURLResponseStatusSuccess;
         self.requestId = 0;
         self.request = nil;
-        self.responseData = [data copy];
-//        self.content = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:NULL];
+        self.responseData = data;
         self.isCache = YES;
     }
     return self;
 }
 
 #pragma mark - private methods
-- (CTURLResponseStatus)responseStatusWithError:(NSError *)error
++ (CTURLResponseStatus)responseStatusWithError:(NSError *)error
 {
     if (error) {
-        CTURLResponseStatus result = CTURLResponseStatusErrorNoNetwork;
-        
+        CTURLResponseStatus result;
         // 除了超时以外，所有错误都当成是无网络
-        if (error.code == NSURLErrorTimedOut) {
+        if (error.code == NSURLErrorTimedOut)
             result = CTURLResponseStatusErrorNoNetwork;
-        }
+        else
+            result = CTURLResponseStatusErrorNoNetwork;
         return result;
     } else {
         return CTURLResponseStatusSuccess;
