@@ -21,7 +21,7 @@
 - (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager beforePerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 - (void)manager:(CTAPIBaseManager * _Nonnull)manager afterPerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager shouldCallAPIWithParams:(NSDictionary * _Nullable)params;
-- (void)manager:(CTAPIBaseManager * _Nonnull)manager afterCallingAPIWithParams:(NSDictionary * _Nullable)params;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager shouldCallAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
+- (void)manager:(CTAPIBaseManager * _Nonnull)manager afterCallingAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 @end

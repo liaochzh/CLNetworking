@@ -10,7 +10,7 @@
 
 @interface CTCommonParamsGenerator : NSObject
 
-+ (NSDictionary *)commonParamsDictionary;
-+ (NSDictionary *)commonParamsDictionaryForLog;
++ (NSDictionary <NSString*,id>*)commonParamsDictionary;
++ (NSDictionary <NSString*,id>*)commonParamsDictionaryForLog;
 
 @end

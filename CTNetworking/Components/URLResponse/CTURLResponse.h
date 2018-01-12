@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, CTURLResponseStatus)
 @property (nonatomic, assign, readonly) NSInteger requestId;
 @property (nonatomic, copy, readonly) NSURLRequest *request;
 @property (nonatomic, copy, readonly) NSData *responseData;
-@property (nonatomic, copy) NSDictionary *requestParams;
+@property (nonatomic, copy) NSDictionary <NSString*,id>*requestParams;
 @property (nonatomic, copy, readonly) NSError *error;
 
 @property (nonatomic, assign, readonly) BOOL isCache;
