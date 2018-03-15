@@ -79,7 +79,7 @@
     NSURLSessionDataTask *dataTask = nil;
     __block NSNumber *requestID;
     
-    dataTask = [self.sessionManager dataTaskWithRequest:request completionHandler:^(NSURLResponse *response, NSData *responseObject, NSError *error) {
+    dataTask = [self.sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, NSData *responseObject, NSError *error) {
         // 队列移除
         [self.dispatchTable removeObjectForKey:requestID];
         
