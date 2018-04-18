@@ -30,6 +30,12 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerErrorType) {
     CTAPIManagerErrorTypeNoNetWork      //网络不通。在调用API之前会判断一下当前网络是否通畅，这个也是在调用API之前验证的，和上面超时的状态是有区别的。
 };
 
+
+enum {
+    kNilRequestID = 0
+};
+
+
 /*************************************************************************************************/
 /*                                       CTAPIBaseManager                                        */
 /*************************************************************************************************/
@@ -43,9 +49,11 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerErrorType) {
 
 @property (nonatomic, weak, nullable) id<CTAPIManagerCallBackDelegate> delegate;
 @property (nonatomic, weak, nullable) id<CTAPIManagerParamSource> paramSource;
+///
 @property (nonatomic, weak, nullable) id<CTAPIManagerValidator> validator;
 /// 里面会调用到NSObject的方法，所以这里不用id
 @property (nonatomic, weak, nullable) NSObject<CTAPIManager> *child;
+/// 拦截器，拦截后不会进入成功或失败回调
 @property (nonatomic, weak, nullable) id<CTAPIManagerInterceptor> interceptor;
 
 /**
@@ -62,39 +70,23 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerErrorType) {
 - (id _Nullable)fetchDataWithReformer:(id<CTAPIManagerDataReformer> _Nullable)reformer;
 
 /// 尽量使用loadData这个方法,这个方法会通过param source来获得参数，这使得参数的生成逻辑位于controller中的固定位置
-- (NSInteger)loadData;
-- (NSInteger)loadDataWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
+- (NSUInteger)loadData;
+- (NSUInteger)loadDataWithParams:(NSDictionary <NSString*, id<NSCoding>>* _Nullable)params;
 
 - (void)cancelAllRequests;
-- (void)cancelRequestWithRequestId:(NSInteger)requestID;
+- (void)cancelRequestWithRequestId:(NSUInteger)requestID;
 
 // 拦截器方法，继承之后需要调用一下super
+
+- (BOOL)shouldCallAPIWithParams:(NSDictionary <NSString*,id<NSCoding>>* _Nullable)params;
+- (void)afterCallingAPIWithParams:(NSDictionary <NSString*,id<NSCoding>>* _Nullable)params;
+
 - (BOOL)beforePerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
 - (void)afterPerformSuccessWithResponse:(CTURLResponse *_Nonnull)response;
 
 - (BOOL)beforePerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 - (void)afterPerformFailWithResponse:(CTURLResponse *_Nonnull)response;
 
-- (BOOL)shouldCallAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
-- (void)afterCallingAPIWithParams:(NSDictionary <NSString*,id>* _Nullable)params;
-
-/*
- 用于给继承的类做重载，在调用API之前额外添加一些参数,但不应该在这个函数里面修改已有的参数。
- 子类中覆盖这个函数的时候就不需要调用[super reformParams:params]了
- CTAPIBaseManager会先调用这个函数，然后才会调用到 id<CTAPIManagerValidator> 中的 manager:isCorrectWithParamsData:
- 所以这里返回的参数字典还是会被后面的验证函数去验证的。
- 
- 假设同一个翻页Manager，ManagerA的paramSource提供page_size=15参数，ManagerB的paramSource提供page_size=2参数
- 如果在这个函数里面将page_size改成10，那么最终调用API的时候，page_size就变成10了。然而外面却觉察不到这一点，因此这个函数要慎用。
- 
- 这个函数的适用场景：
- 当两类数据走的是同一个API时，为了避免不必要的判断，我们将这一个API当作两个API来处理。
- 那么在传递参数要求不同的返回时，可以在这里给返回参数指定类型。
- 
- 具体请参考AJKHDXFLoupanCategoryRecommendSamePriceAPIManager和AJKHDXFLoupanCategoryRecommendSameAreaAPIManager
- 
- */
-- (NSDictionary <NSString*,id>* _Nullable)reformParams:(NSDictionary <NSString*,id>* _Nullable)params;
 
 @end
 

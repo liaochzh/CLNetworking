@@ -41,9 +41,18 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
  */
 - (NSTimeInterval)cacheOutdatedInterval;
 
-- (void)cleanData;
-
-- (NSDictionary <NSString*,id>* _Nullable)reformParams:(NSDictionary <NSString*,id>* _Nullable)params;
+/**
+ 调用API之前额外添加一些参数,但不应该在这个函数里面修改已有的参数。
+ 所以这里返回的参数字典还是会被后面的验证函数去验证的。
+ 
+ 假设同一个翻页Manager，ManagerA的paramSource提供page_size=15参数，ManagerB的paramSource提供page_size=2参数
+ 如果在这个函数里面将page_size改成10，那么最终调用API的时候，page_size就变成10了。然而外面却觉察不到这一点，因此这个函数要慎用。
+ 
+ 这个函数的适用场景：
+ 当两类数据走的是同一个API时，为了避免不必要的判断，我们将这一个API当作两个API来处理。
+ 那么在传递参数要求不同的返回时，可以在这里给返回参数指定类型。
+ */
+- (NSDictionary <NSString*, id<NSCoding>>* _Nullable)reformParams:(NSDictionary <NSString*, id<NSCoding>>* _Nullable)params;
 
 /**
  是否需要加载本地数据

@@ -7,16 +7,13 @@
 //
 
 #import "CTAPIBaseManager.h"
-#import "CTCache.h"
+#import "CTCache+CTApiExt.h"
 #import "CTLogger.h"
 #import "CTApiProxy.h"
 #import <AFNetworking/AFNetworking.h>
 #import "NSURLRequest+CTNetworkingMethods.h"
 #import "NSDictionary+AXNetworkingMethods.h"
 #import "NSString+AXNetworkingMethods.h"
-
-//NSString * const kBSUserTokenNotificationUserInfoKeyRequestToContinue = @"kBSUserTokenNotificationUserInfoKeyRequestToContinue";
-//NSString * const kBSUserTokenNotificationUserInfoKeyManagerToContinue = @"kBSUserTokenNotificationUserInfoKeyManagerToContinue";
 
 // 在调用成功之后的params字典里面，用这个key可以取出requestID
 NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
@@ -25,8 +22,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 @interface CTAPIBaseManager ()
 
 @property (nonatomic, strong, readwrite) id fetchedRawData;
-@property (nonatomic, assign, readwrite) BOOL isLoading;
-//@property (nonatomic, assign) BOOL isNativeDataEmpty;
+//@property (nonatomic, assign, readwrite) BOOL isLoading;
 
 @property (nonatomic, copy, readwrite) NSString *errorMessage;
 @property (nonatomic, readwrite) CTAPIManagerErrorType errorType;
@@ -51,12 +47,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
         _errorMessage = nil;
         _errorType = CTAPIManagerErrorTypeDefault;
         
-        if ([self conformsToProtocol:@protocol(CTAPIManager)]) {
-            self.child = (id <CTAPIManager>)self;
-        } else {
-            NSException *exception = [[NSException alloc] init];
-            @throw exception;
-        }
+        self.child = (id <CTAPIManager>)self;
     }
     return self;
 }
@@ -74,7 +65,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     [self.requestIdList removeAllObjects];
 }
 
-- (void)cancelRequestWithRequestId:(NSInteger)requestID
+- (void)cancelRequestWithRequestId:(NSUInteger)requestID
 {
     [self removeRequestIdWithRequestID:requestID];
     [[CTApiProxy sharedInstance] cancelRequestWithRequestID:@(requestID)];
@@ -92,53 +83,59 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 }
 
 #pragma mark - calling api
-- (NSInteger)loadData
+- (NSUInteger)loadData
 {
     NSDictionary *params = [self.paramSource paramsForApi:self];
-    NSInteger requestId = [self loadDataWithParams:params];
+    NSUInteger requestId = [self loadDataWithParams:params];
     return requestId;
 }
 
-- (NSInteger)loadDataWithParams:(NSDictionary *)params
+- (NSUInteger)loadDataWithParams:(NSDictionary *)params
 {
-    NSInteger requestId = 0;
-    NSDictionary *apiParams = [self reformParams:params];
+    NSObject<CTAPIManager>* child = self.child;
+    if (!child) return kNilRequestID;
+    
+    NSDictionary *apiParams = [child respondsToSelector:@selector(reformParams:)] ? [child reformParams:params] : params;
+    
     if ([self shouldCallAPIWithParams:apiParams]) {
-        if ([self.validator manager:self isCorrectWithParamsData:apiParams]) {
+        if (!self.validator || [self.validator manager:self isCorrectWithParamsData:apiParams]) {
             
             // 先检查一下是否需要读取缓存数据
-            if ([self.child shouldCache]) {
+            BOOL shouldCache = [child respondsToSelector:@selector(shouldCache)] ? [child shouldCache] : false;
+            if (shouldCache) {
                 // 读取缓存数据
                 if ([self loadCacheWithParams:apiParams]) {
-                    return 0;
+                    return kNilRequestID;
                 }
             }
             
-            if ([self.child shouldLoadFromNative]) { // 本地缓存
+            // 本地缓存
+            BOOL shouldNative = [child respondsToSelector:@selector(shouldLoadFromNative)] ?
+            [child shouldLoadFromNative] : false;
+            if (shouldNative)
                 [self loadDataFromNative:apiParams];
-            }
             
             // 实际的网络请求
             if ([self isReachable])
             {
                 // 构建请求
                 NSURLRequest *request;
-                switch (self.child.requestType)
+                switch (child.requestType)
                 {
                     case CTAPIManagerRequestTypeGet:
-                        request = [self.child.requestGenerator generateGETRequestWithServiceIdentifier:self.child.service requestParams:apiParams methodName:self.child.methodName];
+                        request = [child.requestGenerator generateGETRequestWithServiceIdentifier:child.service requestParams:apiParams methodName:child.methodName];
                         break;
                         
                     case CTAPIManagerRequestTypePost:
-                        request = [self.child.requestGenerator generatePOSTRequestWithServiceIdentifier:self.child.service requestParams:apiParams methodName:self.child.methodName];
+                        request = [child.requestGenerator generatePOSTRequestWithServiceIdentifier:child.service requestParams:apiParams methodName:child.methodName];
                         break;
                         
                     case CTAPIManagerRequestTypePut:
-                        request = [self.child.requestGenerator generatePutRequestWithServiceIdentifier:self.child.service requestParams:apiParams methodName:self.child.methodName];
+                        request = [child.requestGenerator generatePutRequestWithServiceIdentifier:child.service requestParams:apiParams methodName:child.methodName];
                         break;
                         
                     case CTAPIManagerRequestTypeDelete:
-                        request = [self.child.requestGenerator generateDeleteRequestWithServiceIdentifier:self.child.service requestParams:apiParams methodName:self.child.methodName];
+                        request = [child.requestGenerator generateDeleteRequestWithServiceIdentifier:child.service requestParams:apiParams methodName:child.methodName];
                         break;
                         
                     default:
@@ -147,41 +144,44 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                 
                 if (request == nil) {
                     [self failedOnCallingAPI:nil withErrorType:CTAPIManagerErrorTypeNoRequest];
-                    return requestId;
+                    return kNilRequestID;
                 }
                 
                 request.requestParams = apiParams;
                 
-                [CTLogger logDebugInfoWithRequest:request apiName:nil service:self.child.service requestParams:apiParams httpMethod:request.HTTPMethod];
-                
-                self.isLoading = YES;
+                [CTLogger logDebugInfoWithRequest:request apiName:nil service:child.service requestParams:apiParams httpMethod:request.HTTPMethod];
                 
                 __weak typeof(self) weakSelf = self;
-                requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request decrypt:
-                             // 解密回调
-                             ^NSData *(NSData *content)
-                             {
-                                 __strong typeof(weakSelf) strongSelf = weakSelf;
-                                 return [strongSelf.child decryptResponse:content];
-                                 
-                             } success:
-                             // 成功回调
-                             ^(CTURLResponse *response)
-                             {
-                                 __strong typeof(weakSelf) strongSelf = weakSelf;
-                                 [strongSelf successedOnCallingAPI:response];
-                                 
-                             } fail:
-                             // 失败回调
-                             ^(CTURLResponse *response)
-                             {
-                                 __strong typeof(weakSelf) strongSelf = weakSelf;
-                                 strongSelf.errorMessage = response.error.localizedDescription;
-                                 if (response.error.code == NSURLErrorTimedOut)
-                                     [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeTimeout];
-                                 else
-                                     [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeDefault];
-                             }];
+                __weak typeof(child) weakChild = child;
+                
+                NSUInteger requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request decrypt:
+                                        // 解密回调
+                                        ^NSData *(NSData *content)
+                                        {
+                                            __strong typeof(weakChild) strongChild = weakChild;
+                                            
+                                            BOOL flag = [strongChild respondsToSelector:@selector(decryptResponse:)];
+                                            
+                                            return flag ? [strongChild decryptResponse:content] : content;
+                                            
+                                        } success:
+                                        // 成功回调
+                                        ^(CTURLResponse *response)
+                                        {
+                                            __strong typeof(weakSelf) strongSelf = weakSelf;
+                                            [strongSelf successedOnCallingAPI:response];
+                                            
+                                        } fail:
+                                        // 失败回调
+                                        ^(CTURLResponse *response)
+                                        {
+                                            __strong typeof(weakSelf) strongSelf = weakSelf;
+                                            strongSelf.errorMessage = response.error.localizedDescription;
+                                            if (response.error.code == NSURLErrorTimedOut)
+                                                [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeTimeout];
+                                            else
+                                                [strongSelf failedOnCallingAPI:response withErrorType:CTAPIManagerErrorTypeDefault];
+                                        }];
                 
                 [self.requestIdList addObject:@(requestId)];
                 
@@ -192,50 +192,56 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                 
             } else {
                 [self failedOnCallingAPI:nil withErrorType:CTAPIManagerErrorTypeNoNetWork];
-                return requestId;
+                return kNilRequestID;
             }
         } else {
             [self failedOnCallingAPI:nil withErrorType:CTAPIManagerErrorTypeParamsError];
-            return requestId;
+            return kNilRequestID;
         }
     }
-    return requestId;
+    return kNilRequestID;
 }
 
 #pragma mark - api callbacks
+
+///
 - (void)successedOnCallingAPI:(CTURLResponse *)response
 {
     self.response = response;
     
-    if (response.content) {
+    if (response.content)
         self.fetchedRawData = [response.content copy];
-    } else {
+    else
         self.fetchedRawData = [response.responseData copy];
-    }
     
-    if ([self.validator manager:self isCorrectWithCallBackData:response.content]) {
+    
+    if (!self.validator || [self.validator manager:self isCorrectWithCallBackData:self.fetchedRawData]) { /// 验证回调数据
         
-        if (response.isCache == NO) {  // 不是缓存数据
+        if (!response.isCache) {  // 不是缓存数据
             
-            self.isLoading = NO;
             [self removeRequestIdWithRequestID:response.requestId];
             
-            BOOL sc = [self.child shouldCache];
-            BOOL sn = [self.child shouldLoadFromNative];
-            
-            if (sc || sn) { // 需要缓存
-                BOOL memoryOnly = (sn == false); // 不需要本地缓存
-                NSData *cacheData = [self.child decryptCache:response.responseData];
-                [self.cache saveCacheWithData:cacheData serviceIdentifier:self.child.service.serviceIdentifier methodName:self.child.methodName requestParams:response.requestParams inMemoryOnly:memoryOnly];
+            NSObject<CTAPIManager>* child = self.child;
+            if (child) {
+                BOOL shouldCache = [child respondsToSelector:@selector(shouldCache)] ? [child shouldCache] : false;
+                BOOL shouldNative = [child respondsToSelector:@selector(shouldLoadFromNative)] ? [child shouldLoadFromNative] : false;
+                
+                if (shouldCache || shouldNative) { // 需要缓存
+                    BOOL memoryOnly = !shouldNative; // 不需要本地缓存
+                    
+                    NSData *cacheData;
+                    if ([child respondsToSelector:@selector(encryptCache:)])
+                        cacheData = [child encryptCache:response.responseData];
+                    else
+                        cacheData = response.responseData;
+                    
+                    [self.cache saveCacheWithData:cacheData serviceIdentifier:child.service.serviceIdentifier methodName:child.methodName requestParams:response.requestParams inMemoryOnly:memoryOnly];
+                }
             }
         }
         
         if ([self beforePerformSuccessWithResponse:response]) {
-            if (response.isCache == YES) {
-                [self.delegate managerCallAPIDidSuccess:self];
-            } else {
-                [self.delegate managerCallAPIDidSuccess:self];
-            }
+            [self.delegate managerCallAPIDidSuccess:self];
         }
         [self afterPerformSuccessWithResponse:response];
         
@@ -244,20 +250,22 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     }
 }
 
+///
 - (void)failedOnCallingAPI:(CTURLResponse *)response withErrorType:(CTAPIManagerErrorType)errorType
 {
+    // 先移除请求id
+    if (response && response.requestId != kNilRequestID) {
+        [self removeRequestIdWithRequestID:response.requestId];
+    }
+    
     // 错误的信息
-    // 没有请求服务器，就处理缓存数据
-    // 正在请求服务器，就不处理缓存数据
-    if ((self.isLoading && !response.isCache) ||
-        !self.isLoading)
-    {
-        self.isLoading = NO;
+    // 响应数据是缓存 报了没数据错误，但还有请求未完成，就不处理了
+    if (!response.isCache || errorType != CTAPIManagerErrorTypeNoContent || !self.isLoading) {
         self.response = response;
         
         // 错误
         self.errorType = errorType;
-        [self removeRequestIdWithRequestID:response.requestId];
+        
         if ([self beforePerformFailWithResponse:response]) {
             [self.delegate managerCallAPIDidFailed:self];
         }
@@ -278,6 +286,24 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
  所有重载的方法，都要调用一下super,这样才能保证外部interceptor能够被调到
  这就是decorate pattern
  */
+
+/// 只有返回YES才会继续调用API
+- (BOOL)shouldCallAPIWithParams:(NSDictionary *)params
+{
+    if (self != self.interceptor && [self.interceptor respondsToSelector:@selector(manager:shouldCallAPIWithParams:)]) {
+        return [self.interceptor manager:self shouldCallAPIWithParams:params];
+    } else {
+        return YES;
+    }
+}
+
+- (void)afterCallingAPIWithParams:(NSDictionary *)params
+{
+    if (self != self.interceptor && [self.interceptor respondsToSelector:@selector(manager:afterCallingAPIWithParams:)]) {
+        [self.interceptor manager:self afterCallingAPIWithParams:params];
+    }
+}
+
 - (BOOL)beforePerformSuccessWithResponse:(CTURLResponse *)response
 {
     BOOL result = YES;
@@ -312,80 +338,39 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     }
 }
 
-//只有返回YES才会继续调用API
-- (BOOL)shouldCallAPIWithParams:(NSDictionary *)params
-{
-    if (self != self.interceptor && [self.interceptor respondsToSelector:@selector(manager:shouldCallAPIWithParams:)]) {
-        return [self.interceptor manager:self shouldCallAPIWithParams:params];
-    } else {
-        return YES;
-    }
-}
-
-- (void)afterCallingAPIWithParams:(NSDictionary *)params
-{
-    if (self != self.interceptor && [self.interceptor respondsToSelector:@selector(manager:afterCallingAPIWithParams:)]) {
-        [self.interceptor manager:self afterCallingAPIWithParams:params];
-    }
-}
-
-#pragma mark - method for child
-- (void)cleanData
-{
-    [self.cache clean];
-    self.fetchedRawData = nil;
-    self.errorMessage = nil;
-    self.errorType = CTAPIManagerErrorTypeDefault;
-    self.response = nil;
-}
-
-//如果需要在调用API之前额外添加一些参数，比如pageNumber和pageSize之类的就在这里添加
-//子类中覆盖这个函数的时候就不需要调用[super reformParams:params]了
-- (NSDictionary *)reformParams:(NSDictionary *)params
-{
-    IMP childIMP = [self.child methodForSelector:@selector(reformParams:)];
-    IMP selfIMP = [self methodForSelector:@selector(reformParams:)];
-    
-    if (childIMP == selfIMP) {
-        return params;
-    } else {
-        // 如果child是继承得来的，那么这里就不会跑到，会直接跑子类中的IMP。
-        // 如果child是另一个对象，就会跑到这里
-        NSDictionary *result = nil;
-        result = [self.child reformParams:params];
-        if (result) {
-            return result;
-        } else {
-            return params;
-        }
-    }
-}
-
 #pragma mark - private methods
-- (void)removeRequestIdWithRequestID:(NSInteger)requestId
+- (void)removeRequestIdWithRequestID:(NSUInteger)requestId
 {
-    NSNumber *requestIDToRemove = nil;
-    for (NSNumber *storedRequestId in self.requestIdList) {
-        if ([storedRequestId integerValue] == requestId) {
-            requestIDToRemove = storedRequestId;
-        }
-    }
-    if (requestIDToRemove) {
-        [self.requestIdList removeObject:requestIDToRemove];
-    }
+    [self.requestIdList removeObject:@(requestId)];
+    //    NSNumber *requestIDToRemove = nil;
+    //    for (NSNumber *storedRequestId in self.requestIdList) {
+    //        if ([storedRequestId unsignedIntegerValue] == requestId) {
+    //            requestIDToRemove = storedRequestId;
+    //        }
+    //    }
+    //    if (requestIDToRemove) {
+    //        [self.requestIdList removeObject:requestIDToRemove];
+    //    }
 }
 
 - (BOOL)loadCacheWithParams:(NSDictionary *)params
 {
-    NSString *serviceIdentifier = self.child.service.serviceIdentifier;
-    NSString *methodName = self.child.methodName;
-    CTService *service = self.child.service;
-    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:self.child.cacheOutdatedInterval];
-    result = [self.child decryptCache:result];
+    NSObject<CTAPIManager> *child = self.child;
+    if (!child) return false;
     
-    if (result == nil) {
+    NSString *serviceIdentifier = child.service.serviceIdentifier;
+    NSString *methodName = child.methodName;
+    CTService *service = child.service;
+    
+    NSTimeInterval outdatedInterva = [child respondsToSelector:@selector(cacheOutdatedInterval)] ? child.cacheOutdatedInterval : 300;
+    
+    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:outdatedInterva];
+    
+    if ([child respondsToSelector:@selector(decryptCache:)])
+        result = [child decryptCache:result];
+    
+    if (result == nil)
         return NO;
-    }
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -401,14 +386,17 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 
 - (BOOL)loadDataFromNative:(NSDictionary *)params
 {
-    NSString *serviceIdentifier = self.child.service.serviceIdentifier;
-    NSString *methodName = self.child.methodName;
-    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:31536000]; // 本地数据，最多就是一年
-    result = [self.child decryptCache:result];
+    NSObject<CTAPIManager> *child = self.child;
+    if (!child) return false;
     
-    if (result == nil) {
-        return NO;
-    }
+    NSString *serviceIdentifier = child.service.serviceIdentifier;
+    NSString *methodName = child.methodName;
+    NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:2592000]; // 本地数据，最多就是一个月
+    
+    if ([child respondsToSelector:@selector(decryptCache:)])
+        result = [child decryptCache:result];
+    
+    if (result == nil) return NO;
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -422,6 +410,11 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 }
 
 #pragma mark - getters and setters
+
+- (BOOL)isLoading {
+    return self.requestIdList.count > 0;
+}
+
 - (CTCache *)cache
 {
     if (_cache == nil) {
@@ -447,45 +440,5 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     return isReachability;
 }
 
-- (BOOL)isLoading
-{
-    if (self.requestIdList.count == 0) {
-        _isLoading = NO;
-    }
-    return _isLoading;
-}
-
-- (BOOL)shouldLoadFromNative
-{
-    return NO;
-}
-
-/// 解密Response 内容
-- (NSData*)decryptResponse:(NSData*)response
-{
-    return response;
-}
-
-/// 本地存储解密
-- (NSData*)decryptCache:(NSData*)cache
-{
-    return cache;
-}
-
-/// 本地存储加密
-- (NSData*)encryptCache:(NSData*)cache
-{
-    return cache;
-}
-
-- (BOOL)shouldCache
-{
-    return NO;
-}
-
-- (NSTimeInterval)cacheOutdatedInterval
-{
-    return 300;
-}
 
 @end

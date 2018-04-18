@@ -40,6 +40,6 @@
  当调用API的参数不是来自用户输入的时候，这个方法可以写成直接返回true。
  反正哪天要真是参数错误，QA那一关肯定过不掉。不过我还是建议认真写完这个参数验证，这样能够省去将来代码维护者很多的时间。
  */
-- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager isCorrectWithParamsData:(NSDictionary <NSString*,id>* _Nullable)data;
+- (BOOL)manager:(CTAPIBaseManager * _Nonnull)manager isCorrectWithParamsData:(NSDictionary <NSString*, id<NSCoding>>* _Nullable)data;
 
 @end

@@ -28,5 +28,6 @@ FOUNDATION_EXPORT const unsigned char CTNetworkingVersionString[];
 #import <CTNetworking/CTAPIManagerParamSource.h>
 #import <CTNetworking/CTAPIManager.h>
 #import <CTNetworking/CTAPIManagerInterceptor.h>
+#import <CTNetworking/CTCache.h>
 
 

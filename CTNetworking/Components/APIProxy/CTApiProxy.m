@@ -77,11 +77,11 @@
 {
     // 跑到这里的block的时候，就已经是主线程了。
     NSURLSessionDataTask *dataTask = nil;
-    __block NSNumber *requestID;
+    __block NSUInteger requestID;
     
     dataTask = [self.sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse *response, NSData *responseObject, NSError *error) {
         // 队列移除
-        [self.dispatchTable removeObjectForKey:requestID];
+        [self.dispatchTable removeObjectForKey:@(requestID)];
         
         // 没错误 和 实现解密block 就进行解密 否则 就直接返回
         NSData *responseData = (error==nil && decrypt!=nil) ? decrypt(responseObject):responseObject;
@@ -97,12 +97,12 @@
             success?success(CTResponse):nil;
     }];
     
-    requestID = @(dataTask.taskIdentifier);
+    requestID = dataTask.taskIdentifier;
     
-    self.dispatchTable[requestID] = dataTask;
+    self.dispatchTable[@(requestID)] = dataTask;
     [dataTask resume];
     
-    return requestID.unsignedIntegerValue;
+    return requestID;
 }
 
 @end

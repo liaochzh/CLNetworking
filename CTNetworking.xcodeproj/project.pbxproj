@@ -22,6 +22,8 @@
 
 /* Begin PBXBuildFile section */
 		9693261476AE67A79C4770FA /* Pods_CTNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F1C7AEEE49CFB4F3E7CE61E9 /* Pods_CTNetworking.framework */; };
+		A33292172087479E003C1E01 /* CTCache+CTApiExt.h in Headers */ = {isa = PBXBuildFile; fileRef = A33292152087479E003C1E01 /* CTCache+CTApiExt.h */; };
+		A33292182087479E003C1E01 /* CTCache+CTApiExt.m in Sources */ = {isa = PBXBuildFile; fileRef = A33292162087479E003C1E01 /* CTCache+CTApiExt.m */; };
 		CB7584591FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = CB7584581FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB75845B1FE0C73C0037F72D /* CTAPIManagerDataReformer.h in Headers */ = {isa = PBXBuildFile; fileRef = CB75845A1FE0C73C0037F72D /* CTAPIManagerDataReformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB75845D1FE0C7890037F72D /* CTAPIManagerValidator.h in Headers */ = {isa = PBXBuildFile; fileRef = CB75845C1FE0C7890037F72D /* CTAPIManagerValidator.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -45,7 +47,7 @@
 		CB9808831E7A6E0200465168 /* CTApiProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98080B1E7A6E0200465168 /* CTApiProxy.m */; };
 		CB9808841E7A6E0200465168 /* CTAPIBaseManager.h in Headers */ = {isa = PBXBuildFile; fileRef = CB98080D1E7A6E0200465168 /* CTAPIBaseManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB9808851E7A6E0200465168 /* CTAPIBaseManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CB98080E1E7A6E0200465168 /* CTAPIBaseManager.m */; };
-		CB9808861E7A6E0200465168 /* CTCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808101E7A6E0200465168 /* CTCache.h */; };
+		CB9808861E7A6E0200465168 /* CTCache.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808101E7A6E0200465168 /* CTCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CB9808871E7A6E0200465168 /* CTCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808111E7A6E0200465168 /* CTCache.m */; };
 		CB9808881E7A6E0200465168 /* CTCachedObject.h in Headers */ = {isa = PBXBuildFile; fileRef = CB9808121E7A6E0200465168 /* CTCachedObject.h */; };
 		CB9808891E7A6E0200465168 /* CTCachedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = CB9808131E7A6E0200465168 /* CTCachedObject.m */; };
@@ -65,6 +67,8 @@
 /* Begin PBXFileReference section */
 		4E1D42D15E6F1BC1BB93A1E0 /* Pods-CTNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.debug.xcconfig"; sourceTree = "<group>"; };
 		883D4FF13553AED1E91C922B /* Pods-CTNetworking.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CTNetworking.release.xcconfig"; path = "Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking.release.xcconfig"; sourceTree = "<group>"; };
+		A33292152087479E003C1E01 /* CTCache+CTApiExt.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CTCache+CTApiExt.h"; sourceTree = "<group>"; };
+		A33292162087479E003C1E01 /* CTCache+CTApiExt.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CTCache+CTApiExt.m"; sourceTree = "<group>"; };
 		CB7584581FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerCallBackDelegate.h; sourceTree = "<group>"; };
 		CB75845A1FE0C73C0037F72D /* CTAPIManagerDataReformer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerDataReformer.h; sourceTree = "<group>"; };
 		CB75845C1FE0C7890037F72D /* CTAPIManagerValidator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CTAPIManagerValidator.h; sourceTree = "<group>"; };
@@ -232,6 +236,8 @@
 				CB9808111E7A6E0200465168 /* CTCache.m */,
 				CB9808121E7A6E0200465168 /* CTCachedObject.h */,
 				CB9808131E7A6E0200465168 /* CTCachedObject.m */,
+				A33292152087479E003C1E01 /* CTCache+CTApiExt.h */,
+				A33292162087479E003C1E01 /* CTCache+CTApiExt.m */,
 			);
 			path = CacheComponents;
 			sourceTree = "<group>";
@@ -324,6 +330,7 @@
 				CB75845D1FE0C7890037F72D /* CTAPIManagerValidator.h in Headers */,
 				CB7584591FE0C6F10037F72D /* CTAPIManagerCallBackDelegate.h in Headers */,
 				CB9808911E7A6E0200465168 /* CTCommonParamsGenerator.h in Headers */,
+				A33292172087479E003C1E01 /* CTCache+CTApiExt.h in Headers */,
 				CB98088E1E7A6E0200465168 /* CTURLResponse.h in Headers */,
 				CB7584611FE0C9610037F72D /* CTAPIManager.h in Headers */,
 				CB98088A1E7A6E0200465168 /* CTLogger.h in Headers */,
@@ -346,7 +353,6 @@
 				CB9807E61E7A6D4200465168 /* Frameworks */,
 				CB9807E71E7A6D4200465168 /* Headers */,
 				CB9807E81E7A6D4200465168 /* Resources */,
-				0C4CB55B528B77F63BF7204E /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -363,7 +369,7 @@
 		CB9807E11E7A6D4200465168 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0920;
+				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = Charlie;
 				TargetAttributes = {
 					CB108D3E1E7BBCBD00D80842 = {
@@ -407,21 +413,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0C4CB55B528B77F63BF7204E /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-CTNetworking/Pods-CTNetworking-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		AC4702482657FBFB83282613 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -465,6 +456,7 @@
 				CB9808921E7A6E0200465168 /* CTCommonParamsGenerator.m in Sources */,
 				CB98087D1E7A6E0200465168 /* NSObject+AXNetworkingMethods.m in Sources */,
 				CB9808811E7A6E0200465168 /* NSURLRequest+CTNetworkingMethods.m in Sources */,
+				A33292182087479E003C1E01 /* CTCache+CTApiExt.m in Sources */,
 				CB98087B1E7A6E0200465168 /* NSMutableString+AXNetworkingMethods.m in Sources */,
 				CB9808851E7A6E0200465168 /* CTAPIBaseManager.m in Sources */,
 				CB98088B1E7A6E0200465168 /* CTLogger.m in Sources */,
@@ -494,6 +486,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -501,6 +494,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -582,6 +576,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -589,6 +584,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;

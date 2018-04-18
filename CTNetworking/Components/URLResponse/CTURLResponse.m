@@ -19,7 +19,7 @@
 //@property (nonatomic, copy, readwrite) NSString *contentString;
 //@property (nonatomic, copy, readwrite) id content;
 @property (nonatomic, copy, readwrite) NSURLRequest *request;
-@property (nonatomic, assign, readwrite) NSInteger requestId;
+@property (nonatomic, assign, readwrite) NSUInteger requestId;
 @property (nonatomic, copy, readwrite) NSData *responseData;
 @property (nonatomic, assign, readwrite) BOOL isCache;
 @property (nonatomic, copy, readwrite) NSError *error;
@@ -29,12 +29,12 @@
 @implementation CTURLResponse
 
 #pragma mark - life cycle
-- (instancetype)initWithRequestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
+- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
 {
     self = [super init];
     if (self) {
         self.status = status;
-        self.requestId = [requestId integerValue];
+        self.requestId = requestId;
         self.request = request;
         self.responseData = responseData;
         self.requestParams = request.requestParams;
@@ -43,7 +43,7 @@
     return self;
 }
 
-- (instancetype)initWithRequestId:(NSNumber *)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
+- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
 {
     CTURLResponseStatus status = [[self class] responseStatusWithError:error];
     if (self = [self initWithRequestId:requestId request:request responseData:responseData status:status])

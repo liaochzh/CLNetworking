@@ -7,12 +7,13 @@
 //
 
 #import "CTCache.h"
-#import "NSDictionary+AXNetworkingMethods.h"
-#import "NSString+AXNetworkingMethods.h"
+#import "CTCachedObject.h"
 
-@interface CTCache ()
+@interface CTCache () {
+    NSCache *_cache;
+}
 
-@property (nonatomic, strong) NSCache *cache;
+@property (nonatomic, readonly) NSCache *cache;
 
 @end
 
@@ -41,45 +42,21 @@
 
 #pragma mark - public method
 
-- (NSData *)fetchCachedDataWithServiceIdentifier:(NSString *)serviceIdentifier
-                                      methodName:(NSString *)methodName
-                                   requestParams:(NSDictionary *)requestParams
-                                outdatedInterval:(NSTimeInterval)interval
-{
-    return [self fetchCachedDataWithKey:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] outdatedInterval:interval];
-}
-
-- (void)saveCacheWithData:(NSData *)cachedData
-        serviceIdentifier:(NSString *)serviceIdentifier
-               methodName:(NSString *)methodName
-            requestParams:(NSDictionary *)requestParams
-             inMemoryOnly:(BOOL)memoryOnly
-{
-    [self saveCacheWithData:cachedData key:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] inMemoryOnly:memoryOnly];
-}
-
-- (void)deleteCacheWithServiceIdentifier:(NSString *)serviceIdentifier
-                              methodName:(NSString *)methodName
-                           requestParams:(NSDictionary *)requestParams
-{
-    [self deleteCacheWithKey:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams]];
-}
-
 - (NSData *)fetchCachedDataWithKey:(NSString *)key outdatedInterval:(NSTimeInterval)interval
 {
     CTCachedObject *cachedObject = [self.cache objectForKey:key];
     
     if (cachedObject == nil) { //
         NSString *filePath = [CTCache cacheFilePath:key];
-        
         cachedObject = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
     }
     
     if (cachedObject) {
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:cachedObject.lastUpdateTime];
-        if (timeInterval < interval) {
+        if (timeInterval < interval)
             return cachedObject.content;
-        }
+        else
+            [self deleteCacheWithKey:key];
     }
     return nil;
 }
@@ -95,33 +72,37 @@
     }
     
     [self.cache setObject:cachedObject forKey:key];
-    
     if (memoryOnly == false) {
-        // 本地存储
-        NSString *cacheFolderPath = [CTCache cacheFolderPath];
-        // 文件夹未存在，先创建文件夹
-        if ([[NSFileManager defaultManager] fileExistsAtPath:cacheFolderPath] == false)
-            [[NSFileManager defaultManager] createDirectoryAtPath:cacheFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+//        // 本地存储
+//        NSString *cacheFolderPath = [CTCache cacheFolderPath];
+//
+//        // 文件夹未存在，先创建文件夹
+//        if ([[NSFileManager defaultManager] fileExistsAtPath:cacheFolderPath] == false)
+//            [[NSFileManager defaultManager] createDirectoryAtPath:cacheFolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+        
         // 保存缓存
-        NSString *filePath = [cacheFolderPath stringByAppendingPathComponent:key];
-        [NSKeyedArchiver archiveRootObject:cachedObject toFile:filePath];
+        NSString *filePath = [CTCache cacheFilePath:key];
+        if ([NSKeyedArchiver archiveRootObject:cachedObject toFile:filePath]) {
+            NSLog(@"cache archive 成功");
+        } else {
+            NSLog(@"cache archive 失败 -->%@", filePath);
+        }
     }
 }
 
 - (void)deleteCacheWithKey:(NSString *)key
 {
     [self.cache removeObjectForKey:key];
+    [[NSFileManager defaultManager] removeItemAtPath:[CTCache cacheFilePath:key] error:nil];
 }
 
 - (void)clean
 {
     [self.cache removeAllObjects];
+    NSString *cacheFolderPath = [CTCache cacheFolderPath];
+    [[NSFileManager defaultManager] removeItemAtPath:cacheFolderPath error:nil];
 }
 
-- (NSString *)keyWithServiceIdentifier:(NSString *)serviceIdentifier methodName:(NSString *)methodName requestParams:(NSDictionary *)requestParams
-{
-    return [NSString stringWithFormat:@"%@%@%@", serviceIdentifier, methodName, [requestParams CT_urlParamsStringSignature:NO]].AX_md5;
-}
 
 #pragma mark - private method
 
