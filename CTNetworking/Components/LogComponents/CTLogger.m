@@ -51,10 +51,11 @@
     }
 }
 
-+ (void)logDebugInfoWithResponse:(NSHTTPURLResponse *)response responseString:(NSString *)responseString request:(NSURLRequest *)request error:(NSError *)error
++ (void)logDebugInfoWithResponse:(NSHTTPURLResponse *)response data:(NSData *)data request:(NSURLRequest *)request error:(NSError *)error
 {
     if (CTLogger.sharedInstance.isDebug) {
         BOOL shouldLogError = error ? YES : NO;
+        NSString *responseString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
         
         NSMutableString *logString = [NSMutableString stringWithString:@"\n\n==============================================================\n=                        API Response                        =\n==============================================================\n\n"];
         
@@ -81,6 +82,8 @@
 + (void)logDebugInfoWithCachedResponse:(CTURLResponse *)response methodName:(NSString *)methodName serviceIdentifier:(CTService *)service
 {
     if (CTLogger.sharedInstance.isDebug) {
+        NSString *responseString = [[NSString alloc] initWithData:response.responseData encoding:NSUTF8StringEncoding];
+        
         NSMutableString *logString = [NSMutableString stringWithString:@"\n\n==============================================================\n=                      Cached Response                       =\n==============================================================\n\n"];
         
         [logString appendFormat:@"API Name:\t\t%@\n", [methodName CT_defaultValue:@"N/A"]];
@@ -90,7 +93,7 @@
         [logString appendFormat:@"Private Key:\t%@\n", [service.privateKey CT_defaultValue:@"N/A"]];
         [logString appendFormat:@"Method Name:\t%@\n", methodName];
         [logString appendFormat:@"Params:\n%@\n\n", response.requestParams];
-        [logString appendFormat:@"Content:\n\t%@\n\n", response.contentString];
+        [logString appendFormat:@"Content:\n\t%@\n\n", responseString];
         
         [logString appendFormat:@"\n\n==============================================================\n=                        Response End                        =\n==============================================================\n\n\n\n"];
         NSLog(@"%@", logString);

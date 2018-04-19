@@ -20,6 +20,7 @@
  你不应该在回调数据验证函数里面设置这些值，事实上，在任何派生的子类里面你都不应该自己设置manager的这个状态，baseManager已经帮你搞定了。
  强行修改manager的这个状态有可能会造成程序流程的改变，容易造成混乱。
  */
+NS_SWIFT_UNAVAILABLE("")
 typedef NS_ENUM (NSUInteger, CTAPIManagerErrorType) {
     CTAPIManagerErrorTypeDefault,       //没有产生过API请求，这个是manager的默认状态。
     CTAPIManagerErrorTypeSuccess,       //API请求成功且返回数据正确，此时manager的数据是可以直接拿来使用的。
@@ -45,6 +46,7 @@ enum {
  外界在使用manager的时候，如果需要调api，只要调用loadData即可。manager会去找paramSource来获得调用api的参数。调用成功或失败，则会调用delegate的回调函数。
  继承的子类manager可以重载basemanager提供的一些方法，来实现一些扩展功能。具体的可以看m文件里面对应方法的注释。
  */
+NS_SWIFT_UNAVAILABLE("")
 @interface CTAPIBaseManager : NSObject
 
 @property (nonatomic, weak, nullable) id<CTAPIManagerCallBackDelegate> delegate;

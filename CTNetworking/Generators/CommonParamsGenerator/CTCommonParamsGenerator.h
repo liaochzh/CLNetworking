@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+NS_SWIFT_UNAVAILABLE("")
 @interface CTCommonParamsGenerator : NSObject
 
 + (NSDictionary <NSString*,id>*)commonParamsDictionary;

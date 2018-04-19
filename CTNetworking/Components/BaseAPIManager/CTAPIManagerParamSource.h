@@ -13,6 +13,7 @@
 /*                                CTAPIManagerParamSourceDelegate                                */
 /*************************************************************************************************/
 /// 让manager能够获取调用API所需要的数据
+NS_SWIFT_UNAVAILABLE("")
 @protocol CTAPIManagerParamSource
 
 @required

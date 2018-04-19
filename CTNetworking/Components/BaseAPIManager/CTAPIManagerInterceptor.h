@@ -12,6 +12,7 @@
 /*                                    CTAPIManagerInterceptor                                    */
 /*************************************************************************************************/
 /// CTAPIBaseManager的派生类必须符合这些protocal
+NS_SWIFT_UNAVAILABLE("")
 @protocol CTAPIManagerInterceptor <NSObject>
 
 @optional

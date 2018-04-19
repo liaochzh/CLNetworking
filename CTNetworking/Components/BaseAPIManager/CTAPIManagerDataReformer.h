@@ -68,6 +68,8 @@
  
  */
 @class CTAPIBaseManager;
+
+NS_SWIFT_UNAVAILABLE("")
 @protocol CTAPIManagerDataReformer <NSObject>
 @required
 /*

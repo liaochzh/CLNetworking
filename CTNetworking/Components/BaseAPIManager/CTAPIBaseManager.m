@@ -11,7 +11,6 @@
 #import "CTLogger.h"
 #import "CTApiProxy.h"
 #import <AFNetworking/AFNetworking.h>
-#import "NSURLRequest+CTNetworkingMethods.h"
 #import "NSDictionary+AXNetworkingMethods.h"
 #import "NSString+AXNetworkingMethods.h"
 
@@ -68,7 +67,7 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
 - (void)cancelRequestWithRequestId:(NSUInteger)requestID
 {
     [self removeRequestIdWithRequestID:requestID];
-    [[CTApiProxy sharedInstance] cancelRequestWithRequestID:@(requestID)];
+    [[CTApiProxy sharedInstance] cancelRequestWithRequestID:requestID];
 }
 
 - (id)fetchDataWithReformer:(id<CTAPIManagerDataReformer>)reformer
@@ -146,15 +145,13 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
                     [self failedOnCallingAPI:nil withErrorType:CTAPIManagerErrorTypeNoRequest];
                     return kNilRequestID;
                 }
-                
-                request.requestParams = apiParams;
-                
+
                 [CTLogger logDebugInfoWithRequest:request apiName:nil service:child.service requestParams:apiParams httpMethod:request.HTTPMethod];
                 
                 __weak typeof(self) weakSelf = self;
                 __weak typeof(child) weakChild = child;
                 
-                NSUInteger requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request decrypt:
+                NSUInteger requestId = [[CTApiProxy sharedInstance] callApiWithRequest:request params:apiParams decrypt:
                                         // 解密回调
                                         ^NSData *(NSData *content)
                                         {
@@ -366,11 +363,11 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     
     NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:outdatedInterva];
     
-    if ([child respondsToSelector:@selector(decryptCache:)])
-        result = [child decryptCache:result];
-    
     if (result == nil)
         return NO;
+    
+    if ([child respondsToSelector:@selector(decryptCache:)])
+        result = [child decryptCache:result];
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -393,10 +390,10 @@ NSString * const kCTAPIBaseManagerRequestID = @"kCTAPIBaseManagerRequestID";
     NSString *methodName = child.methodName;
     NSData *result = [self.cache fetchCachedDataWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:params outdatedInterval:2592000]; // 本地数据，最多就是一个月
     
+    if (result == nil) return NO;
+    
     if ([child respondsToSelector:@selector(decryptCache:)])
         result = [child decryptCache:result];
-    
-    if (result == nil) return NO;
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{

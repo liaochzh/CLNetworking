@@ -18,18 +18,20 @@ typedef NS_ENUM(NSUInteger, CTURLResponseStatus)
 @interface CTURLResponse : NSObject
 
 @property (nonatomic, assign, readonly) CTURLResponseStatus status;
-@property (nonatomic, copy, readonly) NSString *contentString;
-@property (nonatomic, copy, readonly) id content;
-@property (nonatomic, assign, readonly) NSUInteger requestId;
+
+@property (nonatomic, assign, readonly) NSInteger requestId;
 @property (nonatomic, copy, readonly) NSURLRequest *request;
-@property (nonatomic, copy, readonly) NSData *responseData;
-@property (nonatomic, copy) NSDictionary <NSString*,id>*requestParams;
-@property (nonatomic, copy, readonly) NSError *error;
+@property (nonatomic, copy) NSDictionary <NSString*, id>*requestParams;
 
 @property (nonatomic, assign, readonly) BOOL isCache;
 
-- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status;
-- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error;
+@property (nonatomic, copy, readonly) NSData *responseData;
+@property (nonatomic, copy, readonly) id content;
+
+@property (nonatomic, copy, readonly) NSError *error;
+
+- (instancetype)initWithRequestId:(NSInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status;
+- (instancetype)initWithRequestId:(NSInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error;
 
 // 使用initWithData的response，它的isCache是YES，上面两个函数生成的response的isCache是NO
 - (instancetype)initWithData:(NSData *)data;

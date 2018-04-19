@@ -8,18 +8,14 @@
 
 #import "CTURLResponse.h"
 #import "NSObject+AXNetworkingMethods.h"
-#import "NSURLRequest+CTNetworkingMethods.h"
 
 @interface CTURLResponse () {
-    NSString *_contentString;
     id _content;
 }
 
 @property (nonatomic, assign, readwrite) CTURLResponseStatus status;
-//@property (nonatomic, copy, readwrite) NSString *contentString;
-//@property (nonatomic, copy, readwrite) id content;
 @property (nonatomic, copy, readwrite) NSURLRequest *request;
-@property (nonatomic, assign, readwrite) NSUInteger requestId;
+@property (nonatomic, assign, readwrite) NSInteger requestId;
 @property (nonatomic, copy, readwrite) NSData *responseData;
 @property (nonatomic, assign, readwrite) BOOL isCache;
 @property (nonatomic, copy, readwrite) NSError *error;
@@ -29,7 +25,7 @@
 @implementation CTURLResponse
 
 #pragma mark - life cycle
-- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
+- (instancetype)initWithRequestId:(NSInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData status:(CTURLResponseStatus)status
 {
     self = [super init];
     if (self) {
@@ -37,13 +33,12 @@
         self.requestId = requestId;
         self.request = request;
         self.responseData = responseData;
-        self.requestParams = request.requestParams;
         self.isCache = NO;
     }
     return self;
 }
 
-- (instancetype)initWithRequestId:(NSUInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
+- (instancetype)initWithRequestId:(NSInteger)requestId request:(NSURLRequest *)request responseData:(NSData *)responseData error:(NSError *)error
 {
     CTURLResponseStatus status = [[self class] responseStatusWithError:error];
     if (self = [self initWithRequestId:requestId request:request responseData:responseData status:status])
@@ -71,7 +66,7 @@
         CTURLResponseStatus result;
         // 除了超时以外，所有错误都当成是无网络
         if (error.code == NSURLErrorTimedOut)
-            result = CTURLResponseStatusErrorNoNetwork;
+            result = CTURLResponseStatusErrorTimeout;
         else
             result = CTURLResponseStatusErrorNoNetwork;
         return result;
@@ -82,16 +77,9 @@
 
 #pragma mark - get / set 
 
-- (NSString *)contentString {
-    if (_responseData != nil && _contentString == nil) {
-        _contentString = [[NSString alloc] initWithData:_responseData encoding:NSUTF8StringEncoding];
-    }
-    return _contentString;
-}
-
 - (id)content {
     if (_responseData != nil && _content == nil) {
-        _content = [NSJSONSerialization JSONObjectWithData:_responseData options:NSJSONReadingMutableContainers error:NULL];
+        _content = [NSJSONSerialization JSONObjectWithData:_responseData options:NSJSONReadingAllowFragments error:NULL];
     }
     return _content;
 }

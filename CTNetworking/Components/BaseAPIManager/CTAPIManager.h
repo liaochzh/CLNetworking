@@ -15,11 +15,12 @@ typedef NS_ENUM (NSUInteger, CTAPIManagerRequestType){
     CTAPIManagerRequestTypePost,
     CTAPIManagerRequestTypePut,
     CTAPIManagerRequestTypeDelete
-};
+} NS_SWIFT_UNAVAILABLE("");
 
 /*************************************************************************************************/
 /*                                         CTAPIManager                                          */
 /*************************************************************************************************/
+NS_SWIFT_UNAVAILABLE("")
 @protocol CTAPIManager <NSObject>
 
 @required

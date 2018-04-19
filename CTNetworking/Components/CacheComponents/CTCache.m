@@ -55,8 +55,6 @@
         NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:cachedObject.lastUpdateTime];
         if (timeInterval < interval)
             return cachedObject.content;
-        else
-            [self deleteCacheWithKey:key];
     }
     return nil;
 }

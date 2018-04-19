@@ -13,6 +13,7 @@
 /*************************************************************************************************/
 @class CTAPIBaseManager;
 //api回调
+NS_SWIFT_UNAVAILABLE("")
 @protocol CTAPIManagerCallBackDelegate
 @required
 - (void)managerCallAPIDidSuccess:(CTAPIBaseManager * _Nonnull)manager;
