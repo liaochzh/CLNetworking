@@ -11,23 +11,66 @@ import AFNetworking
 
 public typealias ParamsType = [String:AnyObject]
 
-enum APIManagerErrorType {
-    case success
-    case paramsError
-    case timeout
-    case noNetWork
-    case noContent
+public struct APIManagerError: Error {
+    enum `Type` {
+        case success
+        case paramsError
+        case timeout
+        case noNetWork
+        case noContent
+    }
+    
+    let type: Type
+    
+    private let errMessage: String
+    
+    var localizedDescription: String {
+        return errMessage
+    }
+    
+    var detail: String?
+    
+    init(_ type: Type, message: String?) {
+        self.type = type
+        if message == nil {
+            switch type {
+            case .paramsError:
+                errMessage = "参数验证错误"
+            case .timeout:
+                errMessage = "请求超时"
+            case .noNetWork:
+                errMessage = "服务器连接错误"
+            case .noContent:
+                errMessage = "数据验证错误"
+            case .success:
+                errMessage = "请求成功"
+            }
+        } else {
+            errMessage = message!
+        }
+    }
+    
+    init(_ type: Type) {
+        self.init(type, message: nil)
+    }
+    
+    init() {
+        self.init(.success)
+    }
 }
 
+///
 public protocol APIManagerCallBack : class {
     func callAPIDidSuccess(_ manager: APIBaseManager, data: Data)
-    func callAPIDidFailed(_ manager: APIBaseManager, errorMsg: String)
+    func callAPIDidFailed(_ manager: APIBaseManager, error: APIManagerError)
 }
 
+///
 public protocol APIManagerParamSource : class {
     func paramsForApi(_ manager: APIBaseManager) -> APIParameter?
 }
 
+///
 public protocol APIManagerValidator : class {
     
     /**
@@ -38,22 +81,24 @@ public protocol APIManagerValidator : class {
      当调用API的参数不是来自用户输入的时候，这个方法可以写成直接返回true。
      反正哪天要真是参数错误，QA那一关肯定过不掉。不过我还是建议认真写完这个参数验证，这样能够省去将来代码维护者很多的时间。
      */
-    func isCorrectWithParams(_ params: ParamsType?, manager: APIBaseManager) -> Bool
+    func isCorrectWithParams(_ params: ParamsType?, manager: APIBaseManager) -> APIManagerError
     
     /**
      所有的callback数据都应该在这个函数里面进行检查，事实上，到了回调delegate的函数里面是不需要再额外验证返回数据是否为空的。
      因为判断逻辑都在这里做掉了。
      而且本来判断返回数据是否正确的逻辑就应该交给manager去做，不要放到回调到controller的delegate方法里面去做。
      */
-    func isCorrectWithCallBack(_ data: Any?, manager: APIBaseManager) -> Bool
+    func isCorrectWithCallBack(_ data: Any?, manager: APIBaseManager) -> APIManagerError
 }
 
+///
 @objc public protocol RequestGenerator: class {
     
     func generateRequest(service: CTService, params: ParamsType?, methodName: String, type: APIRequestType) -> URLRequest
     
 }
 
+///
 @objc public enum APIRequestType: UInt {
     case get
     case post
@@ -61,6 +106,7 @@ public protocol APIManagerValidator : class {
     case delete
 }
 
+///
 @objc public protocol APIManagerConfiguration : class {
     
     var methodName: String { get }
@@ -111,6 +157,7 @@ public protocol APIManagerValidator : class {
     @objc optional func encryptCache(_ data: Data) -> Data
 }
 
+///
 public protocol APIManagerInterceptor: class {
     
     func shouldCallAPI(params: ParamsType?, manager: APIBaseManager) -> Bool
@@ -122,10 +169,12 @@ public protocol APIManagerInterceptor: class {
     func afterPerformFail(_ response: CTURLResponse?, manager: APIBaseManager)
 }
 
+/// 接口参数基类
 public class APIParameter: Encodable {
     
 }
 
+///
 open class APIBaseManager {
     
     open weak var paramSource: APIManagerParamSource?
@@ -185,8 +234,9 @@ open class APIBaseManager {
         }
         
         // 验证器 验证参数是否正确
-        guard validator?.isCorrectWithParams(paramDict, manager: self) ?? true  else {
-            failedOnCallingAPI(nil, errorType: .paramsError)
+        let err = validator?.isCorrectWithParams(paramDict, manager: self)
+        guard err == nil || err!.type != .success else {
+            failedOnCallingAPI(nil, error: err!)
             return kNilRequestID
         }
         
@@ -204,7 +254,7 @@ open class APIBaseManager {
         
         // 实际的网络请求
         guard isReachable else {
-            failedOnCallingAPI(nil, errorType: .noNetWork)
+            failedOnCallingAPI(nil, error: .init(.noNetWork))
             return kNilRequestID
         }
         
@@ -219,8 +269,8 @@ open class APIBaseManager {
             self?.successedOnCallingAPI(response)
             
             }, fail: { [weak self] (response) in
-                let type: APIManagerErrorType = response.status == .errorTimeout ? .timeout : .noNetWork
-                self?.failedOnCallingAPI(response, errorType: type)
+                let type  = response.status == .errorTimeout ? APIManagerError(.timeout) : APIManagerError(.noNetWork)
+                self?.failedOnCallingAPI(response, error: type)
         })
         requestIdList.append(requestId)
         
@@ -245,8 +295,9 @@ open class APIBaseManager {
         let responseData = response.responseData ?? Data()
         // 验证器 验证回调是否正确
         let object = try? JSONSerialization.jsonObject(with: responseData, options: .allowFragments)
-        guard validator?.isCorrectWithCallBack(object, manager: self) ?? true  else {
-            failedOnCallingAPI(response, errorType: .noContent)
+        let err = validator?.isCorrectWithCallBack(object, manager: self)
+        guard err == nil || err!.type != .success else {
+            failedOnCallingAPI(response, error: err!)
             return
         }
         
@@ -274,7 +325,7 @@ open class APIBaseManager {
         interceptor?.afterPerformSuccess(response, manager: self)
     }
     
-    private func failedOnCallingAPI(_ response: CTURLResponse?, errorType: APIManagerErrorType) {
+    private func failedOnCallingAPI(_ response: CTURLResponse?, error: APIManagerError) {
         // 先移除请求id
         if let requestId = response?.requestId, requestId != kNilRequestID {
             if let index = requestIdList.index(of: requestId) {
@@ -283,14 +334,12 @@ open class APIBaseManager {
         }
         
         // 错误的信息
-        // 响应数据是缓存 报了没数据错误，但还有请求未完成，就不处理了
-        if errorType != .noContent || !isLoading || !(response?.isCache ?? false) {
-            
-            if interceptor?.beforePerformFail(response, manager: self) ?? true {
-                callBack?.callAPIDidFailed(self, errorMsg: "")
-            }
-            interceptor?.afterPerformFail(response, manager: self)
+        if interceptor?.beforePerformFail(response, manager: self) ?? true {
+            var err = error
+            err.detail = response?.error.localizedDescription
+            callBack?.callAPIDidFailed(self, error: error)
         }
+        interceptor?.afterPerformFail(response, manager: self)
     }
     
     // MARK: - private methods

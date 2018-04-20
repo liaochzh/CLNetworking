@@ -21,7 +21,7 @@
 /** 字典变json */
 - (NSString *)CT_jsonString
 {
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:NULL];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:kNilOptions error:NULL];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
 

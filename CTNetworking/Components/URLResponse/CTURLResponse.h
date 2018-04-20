@@ -26,7 +26,7 @@ typedef NS_ENUM(NSUInteger, CTURLResponseStatus)
 @property (nonatomic, assign, readonly) BOOL isCache;
 
 @property (nonatomic, copy, readonly) NSData *responseData;
-@property (nonatomic, copy, readonly) id content;
+@property (nonatomic, copy, readonly) id content NS_SWIFT_UNAVAILABLE("");
 
 @property (nonatomic, copy, readonly) NSError *error;
 
