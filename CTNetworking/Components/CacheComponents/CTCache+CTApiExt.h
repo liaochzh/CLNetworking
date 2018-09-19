@@ -12,22 +12,22 @@
 
 - (NSString *)keyWithServiceIdentifier:(NSString *)serviceIdentifier
                             methodName:(NSString *)methodName
-                         requestParams:(NSDictionary *)requestParams;
+                         requestParams:(id)requestParams;
 
 
 - (NSData *)fetchCachedDataWithServiceIdentifier:(NSString *)serviceIdentifier
                                       methodName:(NSString *)methodName
-                                   requestParams:(NSDictionary *)requestParams
+                                   requestParams:(id)requestParams
                                 outdatedInterval:(NSTimeInterval)interval;
 
 - (void)saveCacheWithData:(NSData *)cachedData
         serviceIdentifier:(NSString *)serviceIdentifier
                methodName:(NSString *)methodName
-            requestParams:(NSDictionary *)requestParams
+            requestParams:(id)requestParams
              inMemoryOnly:(BOOL)memoryOnly;
 
 - (void)deleteCacheWithServiceIdentifier:(NSString *)serviceIdentifier
                               methodName:(NSString *)methodName
-                           requestParams:(NSDictionary *)requestParams;
+                           requestParams:(id)requestParams;
 
 @end

@@ -9,10 +9,10 @@
 import Foundation
 import AFNetworking
 
-public typealias ParamsType = [String:AnyObject]
+public typealias ParamsType = Any
 
 public struct APIManagerError: Error {
-    enum `Type` {
+    public enum `Type` {
         case success
         case paramsError
         case timeout
@@ -20,17 +20,17 @@ public struct APIManagerError: Error {
         case noContent
     }
     
-    let type: Type
+    public let type: Type
     
     private let errMessage: String
     
-    var localizedDescription: String {
+    public var localizedDescription: String {
         return errMessage
     }
     
-    var detail: String?
+    public var detail: String?
     
-    init(_ type: Type, message: String?) {
+    public init(_ type: Type, message: String?) {
         self.type = type
         if message == nil {
             switch type {
@@ -50,11 +50,11 @@ public struct APIManagerError: Error {
         }
     }
     
-    init(_ type: Type) {
+    public init(_ type: Type) {
         self.init(type, message: nil)
     }
     
-    init() {
+    public init() {
         self.init(.success)
     }
 }
@@ -130,11 +130,11 @@ public protocol APIManagerValidator : class {
     /**
      是否需要加载本地数据
      */
-    @objc optional var shouldLoadFromNative: Bool { get }
+    @objc optional var shouldLoadFromNative: Bool { get set }
     /**
      是否加载缓存数据（加载缓存将不再请求服务器）
      */
-    @objc optional var shouldCache: Bool { get }
+    @objc optional var shouldCache: Bool { get set }
     
     /**
      缓存超时间隔(默认300秒)
@@ -170,12 +170,12 @@ public protocol APIManagerInterceptor: class {
 }
 
 /// 接口参数基类
-public class APIParameter: Encodable {
-    
+public protocol APIParameter {
+    func toJsonParam() -> ParamsType
 }
 
 ///
-open class APIBaseManager {
+open class APIBaseManager: Equatable {
     
     open weak var paramSource: APIManagerParamSource?
     open weak var validator: APIManagerValidator?
@@ -192,23 +192,35 @@ open class APIBaseManager {
         return requestIdList.count > 0
     }
     
-    private lazy var cache = CTCache()
+    private lazy var cache = CTCache.sharedInstance()!
     private lazy var requestIdList = [Int]()
     
-    public init() { }
+    // MARK: -
+    public init() {
+        
+    }
+    
+    public static func == (lhs: APIBaseManager, rhs: APIBaseManager) -> Bool {
+        //        if type(of: lhs) == type(of: rhs) {
+        //            return lhs.requestIdList == rhs.requestIdList
+        //        }
+        //        return false
+        return type(of: lhs) == type(of: rhs)
+    }
     
     deinit {
         cancelAllRequests()
     }
     
+    // MARK: -
     /// 尽量使用loadData这个方法,这个方法会通过param source来获得参数，这使得参数的生成逻辑位于controller中的固定位置
     @discardableResult
-    public func loadData() -> Int {
+    open func loadData() -> Int {
         return loadData(paramSource?.paramsForApi(self))
     }
     
     @discardableResult
-    public func loadData(_ params: APIParameter?) -> Int {
+    open func loadData(_ params: APIParameter?) -> Int {
         
         // api 配置清单
         guard let config = configuration else {
@@ -216,40 +228,30 @@ open class APIBaseManager {
         }
         
         // 用了比较笨的方法对象转成了字典
-        let paramDict: ParamsType?
-        if params != nil {
-            let encoder = JSONEncoder()
-            if let data = try? encoder.encode(params!) {
-                paramDict = (try? JSONSerialization.jsonObject(with: data, options: .mutableContainers)) as? ParamsType
-            } else {
-                paramDict = nil
-            }
-        } else {
-            paramDict = nil
-        }
+        let param = params?.toJsonParam()
         
         // 拦截器
-        guard interceptor?.shouldCallAPI(params: paramDict, manager: self) ?? true else {
+        guard interceptor?.shouldCallAPI(params: param, manager: self) ?? true else {
             return kNilRequestID
         }
         
         // 验证器 验证参数是否正确
-        let err = validator?.isCorrectWithParams(paramDict, manager: self)
-        guard err == nil || err!.type != .success else {
+        let err = validator?.isCorrectWithParams(param, manager: self)
+        guard err == nil || err!.type == .success else {
             failedOnCallingAPI(nil, error: err!)
             return kNilRequestID
         }
         
         // 读取缓存数据
         if config.shouldCache ?? false {
-            if loadCache(paramDict) {
+            if loadCache(param) {
                 return kNilRequestID
             }
         }
         
         // 本地缓存
         if config.shouldLoadFromNative ?? false {
-            loadDataFromNative(paramDict)
+            loadDataFromNative(param)
         }
         
         // 实际的网络请求
@@ -259,18 +261,18 @@ open class APIBaseManager {
         }
         
         // 构建请求
-        let request = config.requestGenerator.generateRequest(service: config.service, params: paramDict, methodName: config.methodName, type: config.requestType)
+        let request = config.requestGenerator.generateRequest(service: config.service, params: param, methodName: config.methodName, type: config.requestType)
         
         //
-        CTLogger.logDebugInfo(with: request, apiName: config.methodName, service: config.service, requestParams: paramDict, httpMethod: request.httpMethod)
+        CTLogger.logDebugInfo(with: request, apiName: config.methodName, service: config.service, requestParams: param, httpMethod: request.httpMethod)
         
         //
-        let requestId = ApiProxy.shared.callApi(request: request, params: paramDict, decrypt: config.decryptResponse, success: { [weak self] (response) in
+        let requestId = ApiProxy.shared.callApi(request: request, params: param, decrypt: config.decryptResponse, success: { [weak self] (response) in
             self?.successedOnCallingAPI(response)
             
             }, fail: { [weak self] (response) in
-                let type  = response.status == .errorTimeout ? APIManagerError(.timeout) : APIManagerError(.noNetWork)
-                self?.failedOnCallingAPI(response, error: type)
+                let err  = response.status == .errorTimeout ? APIManagerError(.timeout) : APIManagerError(.noNetWork)
+                self?.failedOnCallingAPI(response, error: err)
         })
         requestIdList.append(requestId)
         
@@ -296,7 +298,7 @@ open class APIBaseManager {
         // 验证器 验证回调是否正确
         let object = try? JSONSerialization.jsonObject(with: responseData, options: .allowFragments)
         let err = validator?.isCorrectWithCallBack(object, manager: self)
-        guard err == nil || err!.type != .success else {
+        guard err == nil || err!.type == .success else {
             failedOnCallingAPI(response, error: err!)
             return
         }
@@ -336,7 +338,7 @@ open class APIBaseManager {
         // 错误的信息
         if interceptor?.beforePerformFail(response, manager: self) ?? true {
             var err = error
-            err.detail = response?.error.localizedDescription
+            err.detail = response?.error?.localizedDescription
             callBack?.callAPIDidFailed(self, error: error)
         }
         interceptor?.afterPerformFail(response, manager: self)
@@ -363,7 +365,7 @@ open class APIBaseManager {
         
         DispatchQueue.main.async { [weak self] in
             let response = CTURLResponse(data: cacheData)!
-            response.requestParams = params as! [String : NSCoding]
+            response.requestParams = params
             
             CTLogger.logDebugInfo(withCachedResponse: response, methodName: methodName, serviceIdentifier: service)
             self?.successedOnCallingAPI(response)
@@ -388,7 +390,7 @@ open class APIBaseManager {
         
         DispatchQueue.main.async { [weak self] in
             let response = CTURLResponse(data: cacheData)!
-            response.requestParams = params as! [String : NSCoding]
+            response.requestParams = params
             
             self?.successedOnCallingAPI(response)
         }

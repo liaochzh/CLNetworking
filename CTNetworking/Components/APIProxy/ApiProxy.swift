@@ -9,8 +9,8 @@
 import Foundation
 import AFNetworking
 
-public typealias AXCallback = (_ response: CTURLResponse) -> Void
-public typealias DecryptContent = (_ content: Data) -> Data
+typealias AXCallback = (_ response: CTURLResponse) -> Void
+typealias DecryptContent = (_ content: Data) -> Data
 
 
 class ApiProxy {

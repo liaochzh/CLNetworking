@@ -12,14 +12,24 @@
 
 @implementation CTCache (CTApiExt)
 
-- (NSString *)keyWithServiceIdentifier:(NSString *)serviceIdentifier methodName:(NSString *)methodName requestParams:(NSDictionary *)requestParams
+- (NSString *)keyWithServiceIdentifier:(NSString *)serviceIdentifier methodName:(NSString *)methodName requestParams:(id)requestParams
 {
-    return [NSString stringWithFormat:@"%@%@%@", serviceIdentifier, methodName, [requestParams CT_urlParamsStringSignature:NO]].AX_md5;
+    NSString *paramsStr;
+    if (requestParams != nil) {
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:requestParams];
+        paramsStr = [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength];
+        
+        NSLog(@"requestParams--->\n%@\ndata--->\n%@\nparamsStr--->\n%@\n", requestParams, data, paramsStr);
+    }
+    
+    if (paramsStr == nil) paramsStr = @"";
+    
+    return [NSString stringWithFormat:@"%@%@%@", serviceIdentifier, methodName, paramsStr].AX_md5;
 }
 
 - (NSData *)fetchCachedDataWithServiceIdentifier:(NSString *)serviceIdentifier
                                       methodName:(NSString *)methodName
-                                   requestParams:(NSDictionary *)requestParams
+                                   requestParams:(id)requestParams
                                 outdatedInterval:(NSTimeInterval)interval
 {
     return [self fetchCachedDataWithKey:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] outdatedInterval:interval];
@@ -28,7 +38,7 @@
 - (void)saveCacheWithData:(NSData *)cachedData
         serviceIdentifier:(NSString *)serviceIdentifier
                methodName:(NSString *)methodName
-            requestParams:(NSDictionary *)requestParams
+            requestParams:(id)requestParams
              inMemoryOnly:(BOOL)memoryOnly
 {
     [self saveCacheWithData:cachedData key:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams] inMemoryOnly:memoryOnly];
@@ -36,7 +46,7 @@
 
 - (void)deleteCacheWithServiceIdentifier:(NSString *)serviceIdentifier
                               methodName:(NSString *)methodName
-                           requestParams:(NSDictionary *)requestParams
+                           requestParams:(id)requestParams
 {
     [self deleteCacheWithKey:[self keyWithServiceIdentifier:serviceIdentifier methodName:methodName requestParams:requestParams]];
 }
